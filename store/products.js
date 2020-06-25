@@ -97,8 +97,8 @@ export const actions = {
   async delete({commit}, [id]){
     await this.$axios.$delete(`http://apidavmar.neoteric-software.com/api/product/delete/${id}`);
   },
-  async addProduct(ctx, [name, category, price, selectedImages, selectedColors,  selectedSizes, selectedBrand, sex, isNew, discountType, discount, description])  {
-    await this.$axios.$post('http://apidavmar.neoteric-software.com/api/product/add', {'name': name, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedColors': selectedColors, 'sizes': selectedSizes, 'selectedBrand': selectedBrand, 'sex': sex, 'isNew': isNew, 'discountType': discountType, 'discount': discount, 'description': description});
+  async addProduct(ctx, [name, category, price, selectedImages, selectedDialSColors, selectedCaseSColors, selectedStrapColors, selectedProperties, selectedBrand, isNew, discountType, discount, description])  {
+    await this.$axios.$post('http://127.0.0.1:8000/api/product/add', {'name': name, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedDialSColors': selectedDialSColors, 'selectedCaseSColors': selectedCaseSColors, 'selectedStrapColors': selectedStrapColors, 'selectedProperties': selectedProperties, 'selectedBrand': selectedBrand, 'isNew': isNew, 'discountType': discountType, 'discount': discount, 'description': description});
   }
 }
 

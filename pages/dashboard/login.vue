@@ -27,9 +27,10 @@
 
 <script>
   export default {
+    name: "login",
+    layout: 'dashboard',
     data () {
       return {
-        name: "login",
         checkbox: false,
         loginForm: {
           email: '',

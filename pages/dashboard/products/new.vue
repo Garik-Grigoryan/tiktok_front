@@ -47,13 +47,64 @@
             <v-text-field type="number" v-model="price" :rules="nameRules" label="Price" required ></v-text-field>
           </v-col>
 
+          <v-row>
+            <v-list-item-title>Add Property</v-list-item-title>
+            <v-col cols="12" v-for="(property, i) in selectedProperties" :key="i" class=" d-flex child-flex" >
+              <v-row>
+                <v-col cols="6">
+                  <v-select @change="changeProp($event)" v-model="property.property" :items="properties"  chips label="Sizes" item-value="id">
+                    <template v-slot:selection="prop">
+                      <v-chip>
+                        <span>{{ prop.item.name }}</span>
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="prop">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{prop.item.name}}
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </v-select>
+                </v-col>
+                <v-col cols="6">
+                  <v-text-field v-if="property.type === 'Text'" v-model="property.value" :rules="nameRules" label="Name" required ></v-text-field>
+
+                  <v-select v-if="property.type === 'Selection'" v-model="property.value" :items="property.values"  chips label="Values" item-value="id">
+                    <template v-slot:selection="prop">
+                      <v-chip>
+                        <span>{{ prop.item.value }}</span>
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="prop">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{prop.item.value}}
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </v-select>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="1">
+              <v-card @click.stop="addProperty" class="mx-auto add_iamge" min-height="50" max-width="50" >
+                <v-icon size="25">mdi-plus</v-icon>
+              </v-card>
+            </v-col>
+          </v-row>
+
+
+
+
 
           <v-row>
-            <v-col v-for="(color, i) in selectedColors" :key="i" class=" d-flex child-flex" cols="1" >
+            <v-list-item-title>Dial color</v-list-item-title>
+            <v-col v-for="(color, i) in selectedDialSColors" :key="i" class=" d-flex child-flex" cols="1" >
               <v-hover v-slot:default="{ hover }">
                 <v-card class="mx-auto add_iamge" min-height="50" max-width="50" :color="color" >
                   <div v-show="hover" class="align-self-center" style="position:relative; height: 100%;">
-                    <v-btn @click="removeColor($event, i)"  icon fab style=" position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); ">
+                    <v-btn @click="removeDialColor($event, i)"  icon fab style=" position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); ">
                       <v-icon size="50" color="error">
                         mdi-delete
                       </v-icon>
@@ -62,53 +113,60 @@
                 </v-card>
               </v-hover>
             </v-col>
-
-
           <v-col cols="1">
-            <v-card @click.stop="colorSelectDialog = true" class="mx-auto add_iamge" min-height="50" max-width="50" >
+            <v-card @click.stop="colorDialSelectDialog = true" class="mx-auto add_iamge" min-height="50" max-width="50" >
               <v-icon size="25">mdi-plus</v-icon>
             </v-card>
           </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12" sm="6">
-              <v-select
-                v-model="selectedSizes"
-                :items="sizes"
-                attach
-                chips
-                label="Sizes"
-                item-value="id"
-                multiple
-              >
-                <template v-slot:selection="size">
-                  <v-chip>
-                    <span>{{ size.item.name }}</span>
-                  </v-chip>
-                </template>
-                <template v-slot:item="size">
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{size.item.name}}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </template>
-              </v-select>
+            <v-list-item-title>Case color</v-list-item-title>
+            <v-col v-for="(color, i) in selectedCaseSColors" :key="i" class=" d-flex child-flex" cols="1" >
+              <v-hover v-slot:default="{ hover }">
+                <v-card class="mx-auto add_iamge" min-height="50" max-width="50" :color="color" >
+                  <div v-show="hover" class="align-self-center" style="position:relative; height: 100%;">
+                    <v-btn @click="removeCaseColor($event, i)"  icon fab style=" position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); ">
+                      <v-icon size="50" color="error">
+                        mdi-delete
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-card>
+              </v-hover>
+            </v-col>
+            <v-col cols="1">
+              <v-card @click.stop="colorCaseSelectDialog = true" class="mx-auto add_iamge" min-height="50" max-width="50" >
+                <v-icon size="25">mdi-plus</v-icon>
+              </v-card>
             </v-col>
           </v-row>
+
           <v-row>
-            <v-col cols="12" >
-            <v-radio-group v-model="sex" row>
-              <v-radio label="Men"  value="men"></v-radio>
-              <v-radio label="Women" value="women"></v-radio>
-            </v-radio-group>
+            <v-list-item-title>Strap color</v-list-item-title>
+            <v-col v-for="(color, i) in selectedStrapColors" :key="i" class=" d-flex child-flex" cols="1" >
+              <v-hover v-slot:default="{ hover }">
+                <v-card class="mx-auto add_iamge" min-height="50" max-width="50" :color="color" >
+                  <div v-show="hover" class="align-self-center" style="position:relative; height: 100%;">
+                    <v-btn @click="removeStrapColor($event, i)"  icon fab style=" position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); ">
+                      <v-icon size="50" color="error">
+                        mdi-delete
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-card>
+              </v-hover>
+            </v-col>
+            <v-col cols="1">
+              <v-card @click.stop="colorStrapSelectDialog = true" class="mx-auto add_iamge" min-height="50" max-width="50" >
+                <v-icon size="25">mdi-plus</v-icon>
+              </v-card>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" >
               <v-checkbox
                 v-model="isNew"
-                label="New"
+                label="Trending"
               ></v-checkbox>
             </v-col>
           </v-row>
@@ -191,13 +249,51 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="colorSelectDialog" max-width="996" >
+    <v-dialog v-model="colorDialSelectDialog" max-width="996" >
       <v-card>
         <v-card-title  style="display: flex; justify-content: space-between;" class="headline">Choose Color <v-btn small @click.stop="colorDialog = true" dark color="purple" >Add new color</v-btn></v-card-title>
         <v-container fluid>
           <v-row>
             <v-col v-for="(color, i) in colors" :key="i" class="d-flex child-flex" cols="1" >
-              <v-card @click.stop="selectColor($event, color.value)" min-height="50" max-width="50" :color="color.value">
+              <v-card @click.stop="selectDialColor($event, color.value)" min-height="50" max-width="50" :color="color.value">
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="colorSelectDialog = false" >close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="colorCaseSelectDialog" max-width="996" >
+      <v-card>
+        <v-card-title  style="display: flex; justify-content: space-between;" class="headline">Choose Color <v-btn small @click.stop="colorDialog = true" dark color="purple" >Add new color</v-btn></v-card-title>
+        <v-container fluid>
+          <v-row>
+            <v-col v-for="(color, i) in colors" :key="i" class="d-flex child-flex" cols="1" >
+              <v-card @click.stop="selectCaseColor($event, color.value)" min-height="50" max-width="50" :color="color.value">
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="colorSelectDialog = false" >close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+
+
+    <v-dialog v-model="colorStrapSelectDialog" max-width="996" >
+      <v-card>
+        <v-card-title  style="display: flex; justify-content: space-between;" class="headline">Choose Color <v-btn small @click.stop="colorDialog = true" dark color="purple" >Add new color</v-btn></v-card-title>
+        <v-container fluid>
+          <v-row>
+            <v-col v-for="(color, i) in colors" :key="i" class="d-flex child-flex" cols="1" >
+              <v-card @click.stop="selectStrapColor($event, color.value)" min-height="50" max-width="50" :color="color.value">
               </v-card>
             </v-col>
           </v-row>
@@ -254,6 +350,7 @@
         await store.dispatch('brands/fetch');
         await store.dispatch('color/fetch');
         await store.dispatch('sizes/fetch');
+        await store.dispatch('properties/fetch');
     },
     data () {
       return {
@@ -271,11 +368,16 @@
         colorName: '',
         price: '',
         description: '',
-        selectedColors: [],
+        selectedDialSColors: [],
+        selectedCaseSColors: [],
+        selectedStrapColors: [],
+        selectedProperties: [],
         sex: 'men',
         hasDiscount: false,
         colorDialog: false,
-        colorSelectDialog: false,
+        colorDialSelectDialog: false,
+        colorCaseSelectDialog: false,
+        colorStrapSelectDialog: false,
         nameRules: [
           v => !!v || 'Field is required',
         ],
@@ -290,19 +392,53 @@
       }
     },
     methods: {
+      changeProp(e) {
+        let found = '';
+          this.properties.filter((property) => {
+          if(property.id == e) {
+            this.selectedProperties.filter((selectedProperty) => {
+              if(selectedProperty.property == e) {
+                selectedProperty.type = property.type
+                selectedProperty.values = property.property_values
+              }
+            })
+          }
+        });
+      },
       removeImage(event, i) {
         this.$delete(this.selectedImages, i);
       },
-      removeColor(event, i) {
-        this.$delete(this.selectedColors, i);
+      removeDialColor(event, i) {
+        this.$delete(this.selectedDialSColors, i);
+      },
+      removeCaseColor(event, i) {
+        this.$delete(this.selectedCaseSColors, i);
+      },
+      removeStrapColor(event, i) {
+        this.$delete(this.selectedStrapColors, i);
       },
       selectImage(event, imageUrl) {
         this.dialog = false;
         this.selectedImages.push(imageUrl);
       },
-      selectColor(event, color) {
-        this.colorSelectDialog = false;
-        this.selectedColors.push(color);
+      selectDialColor(event, color) {
+        this.colorDialSelectDialog = false;
+        this.selectedDialSColors.push(color);
+      },
+      selectCaseColor(event, color) {
+        this.colorCaseSelectDialog = false;
+        this.selectedCaseSColors.push(color);
+      },
+      selectStrapColor(event, color) {
+        this.colorStrapSelectDialog = false;
+        this.selectedStrapColors.push(color);
+      },
+      addProperty() {
+        this.selectedProperties.push({'property': '', 'type': '','value': '', 'values': []});
+        console.log(this.selectedProperties);
+        // this.properties.forEach((elem) => {
+        //   console.log(elem);
+        // })
       },
       uploadImage() {
         this.uploadDialog = false;
@@ -334,12 +470,15 @@
       },
       addProduct() {
 
-        this.$store.dispatch('products/addProduct', [this.name, this.category, this.price, this.selectedImages, this.selectedColors, this.selectedSizes, this.selectedBrand, this.sex, this.isNew, this.discountType, this. discount, this. description]).then(r => {
+        this.$store.dispatch('products/addProduct', [this.name, this.category, this.price, this.selectedImages, this.selectedDialSColors, this.selectedCaseSColors, this.selectedStrapColors, this.selectedProperties, this.selectedBrand, this.isNew, this.discountType, this. discount, this. description]).then(r => {
           // this.$router.push('/dashboard/categories')
         })
       }
     },
     computed: {
+      properties() {
+        return this.$store.getters['properties/properties'];
+      },
       images() {
         return this.$store.getters['multimedia/images'];
       },

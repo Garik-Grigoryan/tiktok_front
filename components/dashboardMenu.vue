@@ -27,6 +27,21 @@
             <v-list-item-title v-text="item.text"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-group no-action value="true"
+        >
+          <template v-slot:activator>
+            <v-list-item-icon>
+              <v-icon>mdi-cog</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Settings</v-list-item-title>
+            </v-list-item-content>
+          </template>
+
+          <v-list-item to="/dashboard/settings/properties">
+            <v-list-item-title>Product properties</v-list-item-title>
+          </v-list-item>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
 </template>
@@ -41,7 +56,7 @@
           {text: 'Menu', icon: 'mdi-wrap', url: '/dashboard/menu'},
           {text: 'Products', icon: 'mdi-webpack', url: '/dashboard/products'},
           {text: 'Components', icon: 'mdi-shape-plus', url: '/dashboard/components'},
-          {text: 'Settings', icon: 'mdi-cog', url: '/dashboard/settings'},
+          // {text: 'Settings', icon: 'mdi-cog', url: '/dashboard/settings'},
         ],
         select: [],
         mini: false,

@@ -326,7 +326,7 @@
         data.append('color', this.color);
         this.$axios.$post('http://apidavmar.neoteric-software.com/api/color/add', data).then(
           response => {
-            this.files = []
+            this.files = [];
             this.$store.dispatch('color/fetch')
           }
         ).catch(e => {

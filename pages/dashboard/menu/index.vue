@@ -23,6 +23,7 @@
   export default {
     layout: 'dashboard',
     name: "menuDashboard",
+    middleware: 'admin',
     order: 16,
     async fetch({store}) {
       await store.dispatch('menus/fetch')

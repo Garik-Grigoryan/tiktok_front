@@ -10,7 +10,7 @@
                       <v-text-field type="number" @input="summCount()" @change="cahngeCount(item)" placeholder="0" v-model="item.count" style="max-width: 60px; margin: 0 auto !important; text-align: center" min="1" ></v-text-field>
                     </template>
                     <template v-slot:item.color="{ item }">
-                      <v-card :color="item.color.toLowerCase()" class="d-flex text-center align-center mx-3" dark height="30" width="30" style="margin: 0 auto !important;" >
+                      <v-card :color="item.color" class="d-flex text-center align-center mx-3" dark height="30" width="30" style="margin: 0 auto !important;" >
                       </v-card>
                     </template>
                     <template v-slot:item.remove="{ item }">
@@ -21,7 +21,7 @@
         <v-col lg="3" md="12">
           <v-card>
             <v-form v-model="formValid">
-            <v-toolbar color="#b20839" dark>
+            <v-toolbar color="#504f4f" dark>
               <v-toolbar-title>
                 cart
               </v-toolbar-title>
@@ -209,7 +209,7 @@
             image: JSON.parse(elem.product.images)[0],
             name: elem.product.name,
             size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-            color: elem.color[0] !== undefined && elem.color[0] !== '#' ? elem.color[0] : elem.color,
+            color: elem.color.length > 0 ? elem.color[0] : '',
             count: elem.count,
             price: elem.product.price,
             remove: key,

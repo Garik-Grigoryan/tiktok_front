@@ -9,7 +9,8 @@
 <script>
     export default {
       layout: 'dashboard',
-        name: "index"
+      middleware: 'admin',
+      name: "index"
     }
 </script>
 

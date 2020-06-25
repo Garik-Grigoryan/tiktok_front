@@ -57,11 +57,8 @@
               </nuxt-link>
               <v-slide-y-reverse-transition>
                 <v-card-text class="pt-6" style="position: absolute; bottom: 0; background-color: #303030; height: 80px" >
-                  <v-btn absolute color="#ea5a21" @click="addToCart($event, product.id)" class="white--text" fab right top >
+                  <v-btn absolute color="#504f4f" @click="addToCart($event, product.id)" class="white--text" fab right top >
                     <v-icon>mdi-cart</v-icon>
-                  </v-btn>
-                  <v-btn absolute color="#ff0057" @click="addToWishlist($event, product.id)" class="white--text" fab top style="right: 90px" >
-                    <v-icon>mdi-heart</v-icon>
                   </v-btn>
                   <nuxt-link :to="`/product/${product.id}`">
                     <h3 class="font-weight-light font-weight-bold white--text mb-2">{{product.name}}</h3>

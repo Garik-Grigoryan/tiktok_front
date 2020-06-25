@@ -1,6 +1,6 @@
 <template id="main">
   <v-app dark>
-    <v-system-bar fixed app height="50" dark color="#303030" style="justify-content: center;">
+    <v-system-bar fixed app height="50" dark color="#303030" style="justify-content: center; z-index: 5;">
       <v-row justify="space-around" align="center">
         <v-col cols="4">
           <v-row align="center">

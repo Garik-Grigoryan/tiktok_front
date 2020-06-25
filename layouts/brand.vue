@@ -207,7 +207,7 @@
       },
       async registerAction() {
 
-        await this.$axios.post('http://apidavmar.neoteric-software.com/api/auth/register', this.registerForm).then(response => {
+        await this.$axios.post('http://tiktokback.neoteric-software.com/api/auth/register', this.registerForm).then(response => {
           this.menu = false;
           this.$auth.login({data: this.registerForm});
         }).catch(e => {

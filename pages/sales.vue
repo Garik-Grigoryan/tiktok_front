@@ -20,16 +20,24 @@
     export default {
         name: "sales",
         layout: 'product',
-        components: {
-          productCard
-        },
         async fetch({store}) {
           await store.dispatch('brands/fetch');
-          await store.dispatch('wishListAndCart/fetch');
+          // await store.dispatch('wishListAndCart/fetch');
           await store.dispatch('menus/fetch');
           await store.dispatch('products/salesProducts');
         },
-        computed: {
+        components: {
+          productCard
+        },
+      data () {
+        return {
+          justifyCenter: 'center',
+        }
+      },
+      async mounted() {
+        await this.$store.dispatch('wishListAndCart/fetch');
+      },
+      computed: {
           products(){
             return this.$store.getters['products/AllSalesProducts'];
           }

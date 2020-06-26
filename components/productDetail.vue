@@ -1,9 +1,5 @@
 <template>
   <div class="mt-3">
-    <ProductZoomer
-      :base-images="images"
-      :base-zoomer-options="zoomerOptions"
-    />
     <v-row>
       <v-col md="6" sm="12">
         <v-carousel
@@ -139,50 +135,6 @@
         selectedSize: [],
         cycle: false,
         count: 1,
-        'images': {
-          'thumbs': [
-            {
-              'id': 1,
-              'url': '/jins1.jpg'
-            },
-            {
-              'id': 2,
-              'url': '/jins1.jpg'
-            }
-          ],
-          'normal_size': [
-            {
-              'id': 1,
-              'url': '/jins1.jpg'
-            },
-            {
-              'id': 2,
-              'url': '/jins1.jpg'
-            }
-          ],
-          'large_size': [
-            {
-              'id': 1,
-              'url': '/jins1.jpg'
-            },
-            {
-              'id': 2,
-              'url': '/jins1.jpg'
-            }
-          ]
-        },
-        'zoomerOptions': {
-          zoomFactor: 3, // scale for zoomer
-          pane: 'pane', // three type of pane ['pane', 'container-round', 'container']
-          hoverDelay: 300, // how long after the zoomer take effect
-          namespace: 'zoomer', // add a namespace for zoomer component, useful when on page have mutiple zoomer
-          move_by_click:false, // move image by click thumb image or by mouseover
-          scroll_items: 5, // thumbs for scroll
-          choosed_thumb_border_color: "#bbdefb", // choosed thumb border color
-          scroller_button_style: "line",
-          scroller_position: "left",
-          zoomer_pane_position: "right"
-        }
       }
     },
     mounted() {

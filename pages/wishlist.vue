@@ -26,16 +26,18 @@
 </template>
 
 <script>
-  var PhoneNumber = require( 'awesome-phonenumber' );
+  if (process.client) {
+    var PhoneNumber = require('awesome-phonenumber');
+  }
     export default {
       async fetch({store}){
         await store.dispatch('brands/fetch');
-        await store.dispatch('wishListAndCart/fetch');
-        if(this.user){
-          await store.dispatch('wishListAndCart/getWishListAndCartData', [this.user.id]);
-        }else{
-          await store.dispatch('wishListAndCart/getWishListAndCartData', [0]);
-        }
+        // await store.dispatch('wishListAndCart/fetch');
+        // if(this.user){
+        //   await store.dispatch('wishListAndCart/getWishListAndCartData', [this.user.id]);
+        // }else{
+        //   await store.dispatch('wishListAndCart/getWishListAndCartData', [0]);
+        // }
         await store.dispatch('menus/fetch');
       },
         name: "Wishlist",
@@ -56,7 +58,13 @@
             ],
           }
       },
-      mounted() {
+      async mounted() {
+        await this.$store.dispatch('wishListAndCart/fetch');
+        if(this.user){
+          await this.$store.dispatch('wishListAndCart/getWishListAndCartData', [this.user.id]);
+        }else{
+          await this.$store.dispatch('wishListAndCart/getWishListAndCartData', [0]);
+        }
         this.wishListData.forEach(elem => {
           this.desserts.push({
             image: JSON.parse(elem.product.images)[0],

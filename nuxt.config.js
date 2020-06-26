@@ -41,7 +41,7 @@ export default {
     './plugins/axios',
     {
       src: './plugins/GoogleAnalytics.js',
-      mode: 'client'
+      ssr: false
     },
     { src: '~plugins/vuedraggable.js', ssr: false }
   ],
@@ -62,8 +62,8 @@ export default {
       }
     },
     redirect: {
-      login: '/auth/login',
-      home: '/'
+      login: false,
+      home: false
     }
   },
   /*
@@ -130,9 +130,6 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
-          mainRed: '#df1f25',
-          mainOrange: '#f39513',
-          mainDarkOrange: '#ea5a21',
         }
       }
     }

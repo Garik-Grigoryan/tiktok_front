@@ -48,7 +48,8 @@
               </template>
               <v-card>
                 <v-list v-if="authenticated" style="background-color: #ea5a21" dark>
-                  <v-list-item :to="localePath('/account')" v-text="$t('myAccount')">
+                  <v-list-item :to="localePath('/account')">
+                    My accaount
                   </v-list-item>
                   <v-list-item @click="logout" v-text="$t('logout')">
                   </v-list-item>

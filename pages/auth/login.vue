@@ -4,7 +4,10 @@
 
 <script>
     export default {
-        name: "login"
+        name: "login",
+        data: () => ({
+
+        }),
     }
 </script>
 

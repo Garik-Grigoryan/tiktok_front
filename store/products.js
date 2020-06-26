@@ -46,7 +46,7 @@ export const mutations = {
 
 export const actions = {
   async fetch({commit}) {
-    const products = await this.$axios.$get('http://apidavmar.neoteric-software.com/api/product/get');
+    const products = await this.$axios.$get('http://tiktokback.neoteric-software.com/api/product/get');
     commit('setProducts', products);
   },
   async getProduct({commit}, [id]){
@@ -78,7 +78,7 @@ export const actions = {
     commit('setProductByIds', ProductsByIds)
   },
   async filterAsType({commit}, [type]){
-    const filterAsTypeProduct = await this.$axios.$get(`http://apidavmar.neoteric-software.com/api/product/fiterAsType/${type}`);
+    const filterAsTypeProduct = await this.$axios.$get(`http://tiktokback.neoteric-software.com/api/product/fiterAsType/${type}`);
     if(type === 'new') {
       commit('setNewProducts', filterAsTypeProduct)
     }else if(type === 'best') {
@@ -92,10 +92,10 @@ export const actions = {
     commit('setAllSalesProducts', filterAsTypeProduct)
   },
   async updateProduct({commit}, [id, name, category, price, selectedImages, selectedColors,  selectedSizes, selectedBrand, sex, isNew, discountType, discount, description]){
-    await this.$axios.$put(`http://apidavmar.neoteric-software.com/api/product/update/${id}`, {'name': name, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedColors': selectedColors, 'sizes': selectedSizes, 'selectedBrand': selectedBrand, 'sex': sex, 'isNew': isNew, 'discountType': discountType, 'discount': discount, 'description': description});
+    await this.$axios.$put(`http://tiktokback.neoteric-software.com/api/product/update/${id}`, {'name': name, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedColors': selectedColors, 'sizes': selectedSizes, 'selectedBrand': selectedBrand, 'sex': sex, 'isNew': isNew, 'discountType': discountType, 'discount': discount, 'description': description});
   },
   async delete({commit}, [id]){
-    await this.$axios.$delete(`http://apidavmar.neoteric-software.com/api/product/delete/${id}`);
+    await this.$axios.$delete(`http://tiktokback.neoteric-software.com/api/product/delete/${id}`);
   },
   async addProduct(ctx, [name, category, price, selectedImages, selectedDialSColors, selectedCaseSColors, selectedStrapColors, selectedProperties, selectedBrand, isNew, discountType, discount, description])  {
     await this.$axios.$post('http://tiktokback.neoteric-software.com/api/product/add', {'name': name, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedDialSColors': selectedDialSColors, 'selectedCaseSColors': selectedCaseSColors, 'selectedStrapColors': selectedStrapColors, 'selectedProperties': selectedProperties, 'selectedBrand': selectedBrand, 'isNew': isNew, 'discountType': discountType, 'discount': discount, 'description': description});

@@ -129,9 +129,9 @@
 </template>
 
 <script>
-  if (process.client) {
+
     var PhoneNumber = require('awesome-phonenumber');
-  }
+
     export default {
       async fetch({store}){
         await store.dispatch('brands/fetch');

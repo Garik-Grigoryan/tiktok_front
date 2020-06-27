@@ -268,7 +268,7 @@
   .phoneNumber{
     font-size: 18px;
     font-weight: 600;
-    color: #ea5a21 !important;
+    color: #303030 !important;
   }
   .theme--dark.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
     color: #FFFFFF !important;

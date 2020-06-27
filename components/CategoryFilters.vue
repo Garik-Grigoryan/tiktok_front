@@ -9,7 +9,7 @@
       <v-divider></v-divider>
       <v-list class="mt-5">
         <v-list-item class="mt-5">
-          <v-range-slider v-model="range" :max="max" :min="min" hide-details class="align-center" thumb-label="always" color="#ea5a21" track-color="#f39513" @change="filter($event)" >
+          <v-range-slider v-model="range" :max="max" :min="min" hide-details class="align-center" thumb-label="always" color="#303030" track-color="#f39513" @change="filter($event)" >
           </v-range-slider>
         </v-list-item>
         <v-list-item v-for="item in items" :key="item.title" >

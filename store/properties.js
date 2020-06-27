@@ -29,6 +29,9 @@ export const actions = {
     const property = await this.$axios.$put(`http://tiktokback.neoteric-software.com/api/productProperties/update/${id}`, {'type': type, 'value': value, 'name': name});
     commit('setProperty', property)
   },
+  async delete({commit}, [id]){
+    await this.$axios.$delete(`http://tiktokback.neoteric-software.com/api/productProperties/delete/${id}`);
+  },
 }
 
 export const getters = {

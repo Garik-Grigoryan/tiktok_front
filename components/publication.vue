@@ -1,5 +1,5 @@
 <template>
-  <v-system-bar color="#ea5a21" absolute app dark height="75" >
+  <v-system-bar color="#303030" absolute app dark height="75" >
     <v-toolbar-title>
       Mother's Day Shop: Gifts she'll love!
     </v-toolbar-title>

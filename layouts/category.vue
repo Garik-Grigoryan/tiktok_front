@@ -47,13 +47,13 @@
                 </v-btn>
               </template>
               <v-card>
-                <v-list v-if="authenticated" style="background-color: #ea5a21" dark>
+                <v-list v-if="authenticated" style="background-color: #303030" dark>
                   <v-list-item :to="localePath('/account')" v-text="$t('myAccount')">
                   </v-list-item>
                   <v-list-item @click="logout" v-text="$t('logout')">
                   </v-list-item>
                 </v-list>
-                <v-tabs v-else background-color="#ea5a21" class="elevation-2" dark :centered="true" :prev-icon="'mdi-arrow-left-bold-box-outline'" :next-icon="'mdi-arrow-right-bold-box-outline'" :icons-and-text="true" >
+                <v-tabs v-else background-color="#303030" class="elevation-2" dark :centered="true" :prev-icon="'mdi-arrow-left-bold-box-outline'" :next-icon="'mdi-arrow-right-bold-box-outline'" :icons-and-text="true" >
                   <v-tabs-slider></v-tabs-slider>
                   <v-tab :href="`#tab-1`" >
                     Login

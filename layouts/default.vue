@@ -54,7 +54,7 @@
                   <v-list-item @click="logout" v-text="$t('logout')">
                   </v-list-item>
                 </v-list>
-                <v-tabs v-else background-color="#ea5a21" class="elevation-2" dark :centered="true" :prev-icon="'mdi-arrow-left-bold-box-outline'" :next-icon="'mdi-arrow-right-bold-box-outline'" :icons-and-text="true" >
+                <v-tabs v-else background-color="#303030" class="elevation-2" dark :centered="true" :prev-icon="'mdi-arrow-left-bold-box-outline'" :next-icon="'mdi-arrow-right-bold-box-outline'" :icons-and-text="true" >
                   <v-tabs-slider></v-tabs-slider>
                   <v-tab :href="`#tab-1`" >
                     Login
@@ -90,8 +90,8 @@
                           </v-alert>
                           <v-text-field v-model="registerForm.name" :rules="nameRules" label="Name" required ></v-text-field>
                           <v-text-field v-model="registerForm.email" :rules="emailRules" label="E-mail" required ></v-text-field>
-                          <v-text-field v-model="registerForm.password" :rules="passwordRules" label="Password" required ></v-text-field>
-                          <v-text-field v-model="registerForm.password_confirmation" :rules="passwordConfirmation" label="Password" required ></v-text-field>
+                          <v-text-field type="password" v-model="registerForm.password" :rules="passwordRules" label="Password" required ></v-text-field>
+                          <v-text-field type="password" v-model="registerForm.password_confirmation" :rules="passwordConfirmation" label="Password" required ></v-text-field>
                           <v-checkbox v-model="checkbox" :rules="[v => !!v || 'You must agree to continue!']" label="Do you agree with conditions?" required ></v-checkbox>
                           <v-card-actions>
                             <v-spacer></v-spacer>

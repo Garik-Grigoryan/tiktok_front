@@ -6,7 +6,7 @@
           Add new Product
         </v-toolbar-title>
         <v-form ref="form" v-model="valid" >
-          <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" required ></v-text-field>
+          <v-text-field v-model="name" :rules="nameRules" label="Name" required ></v-text-field>
           <v-row >
             <v-col cols="6" >
               <v-autocomplete v-model="category" :items="categories" label="Category" item-text="name" item-value="id">
@@ -47,68 +47,62 @@
             <v-text-field type="number" v-model="price" :rules="nameRules" label="Price" required ></v-text-field>
           </v-col>
 
-
           <v-row>
-            <v-col v-for="(color, i) in selectedColors" :key="i" class=" d-flex child-flex" cols="1" >
-              <v-hover v-slot:default="{ hover }">
-                <v-card class="mx-auto add_iamge" min-height="50" max-width="50" :color="color" >
-                  <div v-show="hover" class="align-self-center" style="position:relative; height: 100%;">
-                    <v-btn @click="removeColor($event, i)"  icon fab style=" position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); ">
-                      <v-icon size="50" color="error">
-                        mdi-delete
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </v-card>
-              </v-hover>
+            <v-list-item-title>Add Property</v-list-item-title>
+            <v-col cols="12" v-for="(property, i) in selectedProperties" :key="i" class=" d-flex child-flex" >
+              <v-row>
+                <v-col cols="6">
+                  <v-select @change="changeProp($event)" v-model="property.property" :items="properties"  chips label="Sizes" item-value="id">
+                    <template v-slot:selection="prop">
+                      <v-chip>
+                        <span>{{ prop.item.name }}</span>
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="prop">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{prop.item.name}}
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </v-select>
+                </v-col>
+                <v-col cols="5">
+                  <v-text-field v-if="property.type === 'Text'" v-model="property.value" :rules="nameRules" label="Name" required ></v-text-field>
+
+                  <v-select v-if="property.type === 'Selection'" v-model="property.value" :items="property.values"  chips label="Values" item-value="id">
+                    <template v-slot:selection="prop">
+                      <v-chip>
+                        <span>{{ prop.item.value }}</span>
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="prop">
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{prop.item.value}}
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </v-select>
+                </v-col>
+                <v-col cols="1"><v-btn small :elevation="0" @click="deleteProperty($event, i)" dark fab color="error" ><v-icon>mdi-delete</v-icon></v-btn></v-col>
+              </v-row>
             </v-col>
-
-
             <v-col cols="1">
-              <v-card @click.stop="colorSelectDialog = true" class="mx-auto add_iamge" min-height="50" max-width="50" >
+              <v-card @click.stop="addProperty" class="mx-auto add_iamge" min-height="50" max-width="50" >
                 <v-icon size="25">mdi-plus</v-icon>
               </v-card>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col cols="12" sm="6">
-              <v-select
-                v-model="selectedSizes"
-                :items="sizes"
-                attach
-                chips
-                label="Sizes"
-                item-value="id"
-                multiple
-              >
-                <template v-slot:selection="size">
-                  <v-chip>
-                    <span>{{ size.item.name }}</span>
-                  </v-chip>
-                </template>
-                <template v-slot:item="size">
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      {{size.item.name}}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </template>
-              </v-select>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" >
-              <v-radio-group v-model="sex" row>
-                <v-radio label="Men"  value="men"></v-radio>
-                <v-radio label="Women" value="women"></v-radio>
-              </v-radio-group>
-            </v-col>
-          </v-row>
+
+
+
+
           <v-row>
             <v-col cols="12" >
               <v-checkbox
                 v-model="isNew"
-                label="New"
+                label="Trending"
               ></v-checkbox>
             </v-col>
           </v-row>
@@ -159,7 +153,7 @@
             </v-col>
           </v-row>
 
-          <v-btn :disabled="!valid" @click="updateProduct" color="success" class="mr-4" >Update</v-btn>
+          <v-btn :disabled="!valid" @click="updateProduct" color="success" class="mr-4" >Save</v-btn>
         </v-form>
       </v-col>
     </v-row>
@@ -255,6 +249,8 @@
       await store.dispatch('color/fetch');
       await store.dispatch('sizes/fetch');
       await store.dispatch('products/getProduct', [route.params.id]);
+      await store.dispatch('properties/fetch');
+      await store.dispatch('properties/productProperty', [route.params.id]);
     },
     data () {
       return {
@@ -267,6 +263,7 @@
         uploadDialog: false,
         selectedImages: [],
         selectedSizes: [],
+        selectedProperties: [],
         color: '',
         selectedBrand: '',
         colorName: '',
@@ -291,6 +288,25 @@
       }
     },
     methods: {
+      deleteProperty(e, i){
+        this.$delete(this.selectedProperties, i);
+      },
+      changeProp(e) {
+        let found = '';
+        this.properties.filter((property) => {
+          if(property.id == e) {
+            this.selectedProperties.filter((selectedProperty) => {
+              if(selectedProperty.property == e) {
+                selectedProperty.type = property.type
+                selectedProperty.values = property.property_values
+              }
+            })
+          }
+        });
+      },
+      addProperty() {
+        this.selectedProperties.push({'property': '', 'type': '','value': '', 'values': []});
+      },
       removeImage(event, i) {
         this.$delete(this.selectedImages, i);
       },
@@ -310,7 +326,7 @@
         let data = new FormData();
         data.append('name', this.imageName);
         data.append('image', this.files);
-        this.$axios.$post('http://apidavmar.neoteric-software.com/api/multimedia/upload', data).then(
+        this.$axios.$post('http://tiktokback.neoteric-software.com/api/multimedia/upload', data).then(
           response => {
             this.files = []
             this.$store.dispatch('multimedia/fetch')
@@ -324,7 +340,7 @@
         let data = new FormData();
         data.append('name', this.colorName);
         data.append('color', this.color);
-        this.$axios.$post('http://apidavmar.neoteric-software.com/api/color/add', data).then(
+        this.$axios.$post('http://tiktokback.neoteric-software.com/api/color/add', data).then(
           response => {
             this.files = [];
             this.$store.dispatch('color/fetch')
@@ -334,14 +350,17 @@
         })
       },
       updateProduct() {
-
-        this.$store.dispatch('products/updateProduct', [this.$route.params.id, this.name, this.category, this.price, this.selectedImages, this.selectedColors, this.selectedSizes, this.selectedBrand, this.sex, this.isNew, this.discountType, this. discount, this. description]).then(r => {
-          // this.$router.push('/dashboard/categories')
+        this.$store.dispatch('products/updateProduct', [this.$route.params.id, this.name, this.category, this.price, this.selectedImages, this.selectedProperties, this.selectedBrand, this.isNew, this.discountType, this. discount, this. description]).then(r => {
+          this.$router.push('/dashboard/products')
         })
       }
     },
     mounted() {
-      console.log(this.product);
+      console.log(this.productProperty);
+      this.productProperty.forEach(elem => {
+        this.selectedProperties.push({'property': elem.productProperty.propertyID, 'type': elem.propertyData.type,'value': elem.productProperty.propertyValue, 'values': elem.propertyValues});
+      });
+
       this.name = this.product.name;
       this.category = this.product.category;
       this.price = this.product.price;
@@ -360,6 +379,12 @@
       this.description = this.product.description;
     },
     computed: {
+      productProperty() {
+        return this.$store.getters['properties/productProperty'];
+      },
+      properties() {
+        return this.$store.getters['properties/properties'];
+      },
       images() {
         return this.$store.getters['multimedia/images'];
       },

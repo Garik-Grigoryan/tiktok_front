@@ -6,7 +6,7 @@
           Add new Product
         </v-toolbar-title>
         <v-form ref="form" v-model="valid" >
-          <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" required ></v-text-field>
+          <v-text-field v-model="name"  :rules="nameRules" label="Name" required ></v-text-field>
           <v-row >
             <v-col cols="6" >
               <v-autocomplete v-model="category" :items="categories" label="Category" item-text="name" item-value="id">
@@ -67,7 +67,7 @@
                     </template>
                   </v-select>
                 </v-col>
-                <v-col cols="6">
+                <v-col cols="5">
                   <v-text-field v-if="property.type === 'Text'" v-model="property.value" :rules="nameRules" label="Name" required ></v-text-field>
 
                   <v-select v-if="property.type === 'Selection'" v-model="property.value" :items="property.values"  chips label="Values" item-value="id">
@@ -85,6 +85,7 @@
                     </template>
                   </v-select>
                 </v-col>
+                <v-col cols="1"><v-btn small :elevation="0" @click="deleteProperty($event, i)" dark fab color="error" ><v-icon>mdi-delete</v-icon></v-btn></v-col>
               </v-row>
             </v-col>
             <v-col cols="1">
@@ -97,71 +98,6 @@
 
 
 
-
-          <v-row>
-            <v-list-item-title>Dial color</v-list-item-title>
-            <v-col v-for="(color, i) in selectedDialSColors" :key="i" class=" d-flex child-flex" cols="1" >
-              <v-hover v-slot:default="{ hover }">
-                <v-card class="mx-auto add_iamge" min-height="50" max-width="50" :color="color" >
-                  <div v-show="hover" class="align-self-center" style="position:relative; height: 100%;">
-                    <v-btn @click="removeDialColor($event, i)"  icon fab style=" position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); ">
-                      <v-icon size="50" color="error">
-                        mdi-delete
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </v-card>
-              </v-hover>
-            </v-col>
-          <v-col cols="1">
-            <v-card @click.stop="colorDialSelectDialog = true" class="mx-auto add_iamge" min-height="50" max-width="50" >
-              <v-icon size="25">mdi-plus</v-icon>
-            </v-card>
-          </v-col>
-          </v-row>
-          <v-row>
-            <v-list-item-title>Case color</v-list-item-title>
-            <v-col v-for="(color, i) in selectedCaseSColors" :key="i" class=" d-flex child-flex" cols="1" >
-              <v-hover v-slot:default="{ hover }">
-                <v-card class="mx-auto add_iamge" min-height="50" max-width="50" :color="color" >
-                  <div v-show="hover" class="align-self-center" style="position:relative; height: 100%;">
-                    <v-btn @click="removeCaseColor($event, i)"  icon fab style=" position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); ">
-                      <v-icon size="50" color="error">
-                        mdi-delete
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </v-card>
-              </v-hover>
-            </v-col>
-            <v-col cols="1">
-              <v-card @click.stop="colorCaseSelectDialog = true" class="mx-auto add_iamge" min-height="50" max-width="50" >
-                <v-icon size="25">mdi-plus</v-icon>
-              </v-card>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-list-item-title>Strap color</v-list-item-title>
-            <v-col v-for="(color, i) in selectedStrapColors" :key="i" class=" d-flex child-flex" cols="1" >
-              <v-hover v-slot:default="{ hover }">
-                <v-card class="mx-auto add_iamge" min-height="50" max-width="50" :color="color" >
-                  <div v-show="hover" class="align-self-center" style="position:relative; height: 100%;">
-                    <v-btn @click="removeStrapColor($event, i)"  icon fab style=" position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); ">
-                      <v-icon size="50" color="error">
-                        mdi-delete
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </v-card>
-              </v-hover>
-            </v-col>
-            <v-col cols="1">
-              <v-card @click.stop="colorStrapSelectDialog = true" class="mx-auto add_iamge" min-height="50" max-width="50" >
-                <v-icon size="25">mdi-plus</v-icon>
-              </v-card>
-            </v-col>
-          </v-row>
           <v-row>
             <v-col cols="12" >
               <v-checkbox
@@ -392,6 +328,9 @@
       }
     },
     methods: {
+      deleteProperty(e, i){
+        this.$delete(this.selectedProperties, i);
+      },
       changeProp(e) {
         let found = '';
           this.properties.filter((property) => {
@@ -471,7 +410,7 @@
       addProduct() {
 
         this.$store.dispatch('products/addProduct', [this.name, this.category, this.price, this.selectedImages, this.selectedDialSColors, this.selectedCaseSColors, this.selectedStrapColors, this.selectedProperties, this.selectedBrand, this.isNew, this.discountType, this. discount, this. description]).then(r => {
-          // this.$router.push('/dashboard/categories')
+          this.$router.push('/dashboard/products')
         })
       }
     },

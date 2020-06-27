@@ -91,8 +91,9 @@ export const actions = {
     const filterAsTypeProduct = await this.$axios.$get(`http://tiktokback.neoteric-software.com/api/product/fiterAsSalesType`);
     commit('setAllSalesProducts', filterAsTypeProduct)
   },
-  async updateProduct({commit}, [id, name, category, price, selectedImages, selectedColors,  selectedSizes, selectedBrand, sex, isNew, discountType, discount, description]){
-    await this.$axios.$put(`http://tiktokback.neoteric-software.com/api/product/update/${id}`, {'name': name, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedColors': selectedColors, 'sizes': selectedSizes, 'selectedBrand': selectedBrand, 'sex': sex, 'isNew': isNew, 'discountType': discountType, 'discount': discount, 'description': description});
+
+  async updateProduct({commit}, [id, name, category, price, selectedImages, selectedProperties, selectedBrand, isNew, discountType, discount, description]){
+    await this.$axios.$put(`http://tiktokback.neoteric-software.com/api/product/update/${id}`, {'name': name, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedProperties': selectedProperties, 'selectedBrand': selectedBrand, 'isNew': isNew, 'discountType': discountType,  'discount': discount,  'description': description});
   },
   async delete({commit}, [id]){
     await this.$axios.$delete(`http://tiktokback.neoteric-software.com/api/product/delete/${id}`);

@@ -1,6 +1,7 @@
 export const state = () => ({
   properties: [],
   property: [],
+  productProperty: [],
 });
 
 export const mutations = {
@@ -9,6 +10,9 @@ export const mutations = {
   },
   setProperty(state, property){
     state.property = property;
+  },
+  setProductProperty(state, property){
+    state.productProperty = property;
   },
 }
 
@@ -20,6 +24,10 @@ export const actions = {
   async getProperty({commit}, [id]){
     const property = await this.$axios.$get(`http://tiktokback.neoteric-software.com/api/productProperties/get/${id}`);
     commit('setProperty', property)
+  },
+  async productProperty({commit}, [id]){
+    const property = await this.$axios.$get(`http://tiktokback.neoteric-software.com/api/productProperties/productProperty/${id}`);
+    commit('setProductProperty', property)
   },
   async addProperty({commit}, [type, value, name]){
     const property = await this.$axios.$post(`http://tiktokback.neoteric-software.com/api/productProperties/add`, {'type': type, 'value': value, 'name': name});
@@ -37,4 +45,5 @@ export const actions = {
 export const getters = {
   properties: s => s.properties,
   property: s => s.property,
+  productProperty: s => s.productProperty,
 }

@@ -69,7 +69,6 @@
                 </v-col>
                 <v-col cols="5">
                   <v-text-field v-if="property.type === 'Text'" v-model="property.value" :rules="nameRules" label="Name" required ></v-text-field>
-
                   <v-select v-if="property.type === 'Selection'" v-model="property.value" :items="property.values"  chips label="Values" item-value="id">
                     <template v-slot:selection="prop">
                       <v-chip>
@@ -288,6 +287,13 @@
       }
     },
     methods: {
+      isNumeric(n) {
+        if(!isNaN(parseFloat(n)) && isFinite(n)){
+          return parseInt(n)
+        }else{
+          return n;
+        }
+      },
       deleteProperty(e, i){
         this.$delete(this.selectedProperties, i);
       },
@@ -358,7 +364,7 @@
     mounted() {
       console.log(this.productProperty);
       this.productProperty.forEach(elem => {
-        this.selectedProperties.push({'property': elem.productProperty.propertyID, 'type': elem.propertyData.type,'value': elem.productProperty.propertyValue, 'values': elem.propertyValues});
+        this.selectedProperties.push({'property': elem.productProperty.propertyID, 'type': elem.propertyData.type,'value': this.isNumeric(elem.productProperty.propertyValue), 'values': elem.propertyValues});
       });
 
       this.name = this.product.name;

@@ -16,7 +16,7 @@
         <tbody>
         <tr v-for="item in products" :key="item.name">
           <td><v-img :src="JSON.parse(item.images)[0]" max-width="100"></v-img></td>
-          <td>{{ item.name }}</td>
+          <td>{{ item.name_en }}</td>
           <td><v-btn small :to="`products/edit/${item.id}`" :elevation="0" dark fab color="primary" ><v-icon>mdi-pencil</v-icon></v-btn> <v-btn small :elevation="0" @click="deleteProducts($event, item.id )" dark fab color="error" ><v-icon>mdi-delete</v-icon></v-btn></td>
         </tr>
         </tbody>

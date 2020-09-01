@@ -6,20 +6,36 @@
           Add new brands
         </v-toolbar-title>
         <v-form ref="form" v-model="valid" >
-          <v-text-field v-model="name" :counter="10" :rules="nameRules" label="Name" required ></v-text-field>
+          <v-text-field v-model="name_am" :counter="10" :rules="nameRules" label="Name (AM)" required ></v-text-field>
+          <v-text-field v-model="name_en" :counter="10" :rules="nameRules" label="Name (ENG)" required ></v-text-field>
+          <v-text-field v-model="name_ru" :counter="10" :rules="nameRules" label="Name (RU)" required ></v-text-field>
           <v-row >
             <v-col cols="6" >
-              <v-autocomplete v-model="parentCategory" :items="categories" label="Parent Category" item-text="name" item-value="id">
+              <!-- <v-autocomplete v-model="parentCategory" :items="categories" label="Parent Category" item-text="name" item-value="id">
                 <template v-slot:selection="category">
                   <v-list-item-content>
                     <v-list-item-title>
-                      {{category.item.name}}
+                      {{category.item.name_en}}
                     </v-list-item-title>
                   </v-list-item-content>
                 </template>
                 <template v-slot:item="category">
                   <v-list-item-content>
-                    <v-list-item-title>{{category.name}}</v-list-item-title>
+                    <v-list-item-title>{{category.name_en}}</v-list-item-title>
+                  </v-list-item-content>
+                </template>
+              </v-autocomplete> -->
+              <v-autocomplete v-model="parentCategory" :items="categories" label="Parent Category" item-text="name" item-value="id">
+                <template v-slot:selection="category">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{category.item.name_en}}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </template>
+                <template v-slot:item="category">
+                  <v-list-item-content>
+                    <v-list-item-title>{{category.item.name_en}}</v-list-item-title>
                   </v-list-item-content>
                 </template>
               </v-autocomplete>
@@ -131,7 +147,9 @@
 
 <script>
     export default {
-        name: "",
+        name_en: "",
+        name_am: "",
+        name_ru: "",
         layout: 'dashboard',
         middleware: 'admin',
         async fetch({route, store}) {
@@ -188,13 +206,15 @@
             })
           },
           updateCategory() {
-            this.$store.dispatch('categories/updateCategory', [this.$route.params.id, this.name, this.order, this.selectedImages, this.color, this.selectedBrand, this.parentCategory]).then(r => {
+            this.$store.dispatch('categories/updateCategory', [this.$route.params.id, this.name_en, this.name_am, this.name_ru, this.order, this.selectedImages, this.color, this.selectedBrand, this.parentCategory]).then(r => {
               this.$router.push('/dashboard/categories')
             })
           }
         },
       mounted() {
-        this.name = this.category.name;
+        this.name_en = this.category.name_en;
+        this.name_am = this.category.name_am;
+        this.name_ru = this.category.name_ru;
         this.order = this.category.order;
         this.selectedImages = JSON.parse(this.category.image);
         this.color = this.category.color;

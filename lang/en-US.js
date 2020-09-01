@@ -6,5 +6,8 @@ export default {
     contacts: 'Contacts'
   },
   myAccount: 'My Account',
-  logout: 'Logout'
+  orders: "My orders",
+  logout: 'Logout',
+  aboutUs: 'About us',
+  delivery_conditions: 'Delivery Conditions'
 }

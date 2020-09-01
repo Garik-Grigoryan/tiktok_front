@@ -6,5 +6,8 @@ export default {
     contacts: 'Контакты'
   },
   myAccount: 'Мой аккаунт',
-  logout: 'Выход'
+  orders: "Мои заказы",
+  logout: 'Выход',
+  aboutUs: 'О нас',
+  delivery_conditions: 'Условия Доставки'
 }

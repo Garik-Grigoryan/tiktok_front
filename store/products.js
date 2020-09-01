@@ -46,11 +46,11 @@ export const mutations = {
 
 export const actions = {
   async fetch({commit}) {
-    const products = await this.$axios.$get('http://tiktokback.neoteric-software.com/api/product/get');
+    const products = await this.$axios.$get('http://localhost:8000/api/product/get');
     commit('setProducts', products);
   },
   async getProduct({commit}, [id]){
-    const product = await this.$axios.$get(`http://tiktokback.neoteric-software.com/api/product/get/${id}`);
+    const product = await this.$axios.$get(`http://localhost:8000/api/product/get/${id}`);
     commit('setProduct', product)
   },
   async getProductByBrandId({commit}, [id, page]){
@@ -58,7 +58,7 @@ export const actions = {
     commit('setProductByBrand', products)
   },
   async getProductByCategoryId({commit}, [id, page]){
-    const products = await this.$axios.$get(`http://tiktokback.neoteric-software.com/api/product/getByCategoryId/${id}?page=${page}`);
+    const products = await this.$axios.$get(`http://localhost:8000/api/product/getByCategoryId/${id}?page=${page}`);
     commit('setProductByCategory', products)
   },
   async getCategoryFilters({commit}, [id]){
@@ -70,7 +70,7 @@ export const actions = {
     commit('setProductByBrand', filteredProducts)
   },
   async FilterByCategory({commit}, [filter, priceRange, category, page = 0]){
-    const filteredProducts = await this.$axios.$post(`http://tiktokback.neoteric-software.com/api/product/filterByCategory`, {'filters': filter, 'priceRange': priceRange, 'category': category, 'page': page});
+    const filteredProducts = await this.$axios.$post(`http://localhost:8000/api/product/filterByCategory`, {'filters': filter, 'priceRange': priceRange, 'category': category, 'page': page});
     commit('setProductByCategory', filteredProducts)
   },
   async getProductsByIds({commit}, [ids]){
@@ -78,7 +78,7 @@ export const actions = {
     commit('setProductByIds', ProductsByIds)
   },
   async filterAsType({commit}, [type]){
-    const filterAsTypeProduct = await this.$axios.$get(`http://tiktokback.neoteric-software.com/api/product/fiterAsType/${type}`);
+    const filterAsTypeProduct = await this.$axios.$get(`http://localhost:8000/api/product/fiterAsType/${type}`);
     if(type === 'new') {
       commit('setNewProducts', filterAsTypeProduct)
     }else if(type === 'best') {
@@ -92,14 +92,14 @@ export const actions = {
     commit('setAllSalesProducts', filterAsTypeProduct)
   },
 
-  async updateProduct({commit}, [id, name, category, price, selectedImages, selectedProperties, selectedBrand, isNew, discountType, discount, description]){
-    await this.$axios.$put(`http://tiktokback.neoteric-software.com/api/product/update/${id}`, {'name': name, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedProperties': selectedProperties, 'selectedBrand': selectedBrand, 'isNew': isNew, 'discountType': discountType,  'discount': discount,  'description': description});
+  async updateProduct({commit}, [id, name_en, name_am, name_ru, category, price, selectedImages, selectedProperties, selectedBrand, isNew, discountType, discount, description]){
+    await this.$axios.$put(`http://localhost:8000/api/product/update/${id}`, {'name_en': name_en, 'name_am': name_am, 'name_ru': name_ru, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedProperties': selectedProperties, 'selectedBrand': selectedBrand, 'isNew': isNew, 'discountType': discountType,  'discount': discount,  'description': description});
   },
   async delete({commit}, [id]){
     await this.$axios.$delete(`http://tiktokback.neoteric-software.com/api/product/delete/${id}`);
   },
-  async addProduct(ctx, [name, category, price, selectedImages, selectedDialSColors, selectedCaseSColors, selectedStrapColors, selectedProperties, selectedBrand, isNew, discountType, discount, description])  {
-    await this.$axios.$post('http://tiktokback.neoteric-software.com/api/product/add', {'name': name, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedDialSColors': selectedDialSColors, 'selectedCaseSColors': selectedCaseSColors, 'selectedStrapColors': selectedStrapColors, 'selectedProperties': selectedProperties, 'selectedBrand': selectedBrand, 'isNew': isNew, 'discountType': discountType, 'discount': discount, 'description': description});
+  async addProduct(ctx, [name_en, name_am, name_ru, category, price, selectedImages, selectedDialSColors, selectedCaseSColors, selectedStrapColors, selectedProperties, selectedBrand, isNew, discountType, discount, description])  {
+    await this.$axios.$post('http://localhost:8000/api/product/add', {'name_en': name_en, 'name_am': name_am, 'name_ru': name_ru, 'category': category, 'price': price, 'selectedImages': selectedImages, 'selectedDialSColors': selectedDialSColors, 'selectedCaseSColors': selectedCaseSColors, 'selectedStrapColors': selectedStrapColors, 'selectedProperties': selectedProperties, 'selectedBrand': selectedBrand, 'isNew': isNew, 'discountType': discountType, 'discount': discount, 'description': description});
   }
 }
 

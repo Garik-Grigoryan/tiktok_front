@@ -6,5 +6,8 @@ export default {
     contacts: 'Կոնտակտներ'
   },
   myAccount: 'Իմ Էջը',
-  logout: 'ելք'
+  orders: "իմ պատվերները",
+  logout: 'ելք',
+  aboutUs: 'Մեր մասին',
+  delivery_conditions: 'Առաքում պայմաններ'
 }

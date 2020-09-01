@@ -6,20 +6,22 @@
           Add new Product
         </v-toolbar-title>
         <v-form ref="form" v-model="valid" >
-          <v-text-field v-model="name"  :rules="nameRules" label="Name" required ></v-text-field>
+          <v-text-field v-model="name_am" :rules="nameRules" label="Name (AM)" required ></v-text-field>
+          <v-text-field v-model="name_en" :rules="nameRules" label="Name (ENG)" required ></v-text-field>
+          <v-text-field v-model="name_ru" :rules="nameRules" label="Name (RU)" required ></v-text-field>
           <v-row >
             <v-col cols="6" >
               <v-autocomplete v-model="category" :items="categories" label="Category" item-text="name" item-value="id">
                 <template v-slot:selection="category">
                   <v-list-item-content>
                     <v-list-item-title>
-                      {{category.item.name}}
+                      {{category.item.name_en}}
                     </v-list-item-title>
                   </v-list-item-content>
                 </template>
                 <template v-slot:item="category">
                   <v-list-item-content>
-                    <v-list-item-title>{{category.item.name}}</v-list-item-title>
+                    <v-list-item-title>{{category.item.name_en}}</v-list-item-title>
                   </v-list-item-content>
                 </template>
               </v-autocomplete>
@@ -55,13 +57,13 @@
                   <v-select @change="changeProp($event)" v-model="property.property" :items="properties"  chips label="Sizes" item-value="id">
                     <template v-slot:selection="prop">
                       <v-chip>
-                        <span>{{ prop.item.name }}</span>
+                        <span>{{ prop.item.name_en }}</span>
                       </v-chip>
                     </template>
                     <template v-slot:item="prop">
                       <v-list-item-content>
                         <v-list-item-title>
-                          {{prop.item.name}}
+                          {{prop.item.name_en}}
                         </v-list-item-title>
                       </v-list-item-content>
                     </template>
@@ -73,13 +75,13 @@
                   <v-select v-if="property.type === 'Selection'" v-model="property.value" :items="property.values"  chips label="Values" item-value="id">
                     <template v-slot:selection="prop">
                       <v-chip>
-                        <span>{{ prop.item.value }}</span>
+                        <span>{{ prop.item.value_am }}</span>
                       </v-chip>
                     </template>
                     <template v-slot:item="prop">
                       <v-list-item-content>
                         <v-list-item-title>
-                          {{prop.item.value}}
+                          {{prop.item.value_am}}
                         </v-list-item-title>
                       </v-list-item-content>
                     </template>
@@ -292,7 +294,9 @@
       return {
         valid: true,
         imageUpladForm: true,
-        name: '',
+        name_en: '',
+        name_am: '',
+        name_ru: '',
         isNew: false,
         imageName: '',
         dialog: false,
@@ -408,8 +412,7 @@
         })
       },
       addProduct() {
-
-        this.$store.dispatch('products/addProduct', [this.name, this.category, this.price, this.selectedImages, this.selectedDialSColors, this.selectedCaseSColors, this.selectedStrapColors, this.selectedProperties, this.selectedBrand, this.isNew, this.discountType, this. discount, this. description]).then(r => {
+        this.$store.dispatch('products/addProduct', [this.name_en, this.name_am, this.name_ru, this.category, this.price, this.selectedImages, this.selectedDialSColors, this.selectedCaseSColors, this.selectedStrapColors, this.selectedProperties, this.selectedBrand, this.isNew, this.discountType, this. discount, this. description]).then(r => {
           this.$router.push('/dashboard/products')
         })
       }

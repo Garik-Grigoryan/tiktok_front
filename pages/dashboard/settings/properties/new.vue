@@ -7,10 +7,16 @@
         </v-toolbar-title>
         <v-form ref="form" v-model="valid" >
           <v-row >
-            <v-col cols="6" >
-              <v-text-field v-model="name"  :rules="nameRules" label="Name" required ></v-text-field>
+            <v-col cols="12" >
+              <v-text-field v-model="name_am"  :rules="nameRules" label="Name (AM)" required ></v-text-field>
             </v-col>
-            <v-col cols="6" >
+            <v-col cols="12" >
+              <v-text-field v-model="name_en"  :rules="nameRules" label="Name (ENG)" required ></v-text-field>
+            </v-col>
+            <v-col cols="12" >
+              <v-text-field v-model="name_ru"  :rules="nameRules" label="Name (RU)" required ></v-text-field>
+            </v-col>
+            <v-col cols="12" >
               <v-autocomplete v-model="type" @change="changeType" :items="types" label="Type" item-text="name" item-value="id">
                 <template v-slot:selection="type">
                   <v-list-item-content>
@@ -47,7 +53,13 @@
             <v-col cols="7" v-for="(item, i) of value" :key="i">
               <v-row align="center">
                 <v-col cols="10">
-                  <v-text-field v-model="item.value" :rules="nameRules" label="Value" required ></v-text-field>
+                  <v-text-field v-model="item.value_am" :rules="nameRules" label="Value (AM)" required ></v-text-field>
+                </v-col>
+                <v-col cols="10">
+                  <v-text-field v-model="item.value_en" :rules="nameRules" label="Value (ENG)" required ></v-text-field>
+                </v-col>
+                <v-col cols="10">
+                  <v-text-field v-model="item.value_ru" :rules="nameRules" label="Value (RU)" required ></v-text-field>
                 </v-col>
                 <v-col cols="2">
                   <v-icon @click="removeSelectionItem($event, i)" size="25">mdi-delete</v-icon>
@@ -85,7 +97,9 @@
         type: '',
         value: 'field',
         valid: true,
-        name: '',
+        name_en: '',
+        name_am: '',
+        name_ru: '',
         types: [
           {'name': 'Text'},
           {'name': 'Long Text'},
@@ -117,7 +131,7 @@
         }
       },
       addProperty(e) {
-        this.$store.dispatch('properties/addProperty', [this.type, this.value, this.name]);
+        this.$store.dispatch('properties/addProperty', [this.type, this.value, this.name_en, this.name_am, this.name_ru]);
       }
     },
   }

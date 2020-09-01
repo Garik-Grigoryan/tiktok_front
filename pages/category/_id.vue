@@ -1,17 +1,37 @@
 <template>
   <div>
     <v-container>
-      <v-row justify="center">
+      <v-row v-if="$i18n.locale === 'en'" justify="center">
         <productCard
           v-for="(product, i) in products.products"
           :key="i"
           :image="JSON.parse(product.images)[0]"
           :id="product.id"
-          :title="product.name"
+          :title="product.name_en"
           :price="product.price"
         ></productCard>
-
       </v-row>
+      <v-row v-if="$i18n.locale === 'am'" justify="center">
+        <productCard
+          v-for="(product, i) in products.products"
+          :key="i"
+          :image="JSON.parse(product.images)[0]"
+          :id="product.id"
+          :title="product.name_am"
+          :price="product.price"
+        ></productCard>
+      </v-row>
+      <v-row v-if="$i18n.locale === 'ru'" justify="center">
+        <productCard
+          v-for="(product, i) in products.products"
+          :key="i"
+          :image="JSON.parse(product.images)[0]"
+          :id="product.id"
+          :title="product.name_ru"
+          :price="product.price"
+        ></productCard>
+      </v-row>
+
       <div v-if="products.count > 1" class="text-center">
         <v-pagination
           v-model="page"

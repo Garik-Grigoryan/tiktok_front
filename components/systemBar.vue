@@ -35,8 +35,20 @@
                     <v-menu :open-on-hover="true" bottom offset-y v-for="(item, i) in rightSide" dark :key="i">
                       <template v-slot:activator="{ on }">
                         <v-btn exact :to="localePath(item.to)" router color="#303030" style="font-size: 18px; font-weight: 600" text class="nav_button" v-on="on" bottom >
-                          {{item.title}}
+                          <span v-if="item.title === 'Delivery conditions' || item.title === 'About us'">{{item.title}}</span>
+                          <span v-if="$i18n.locale == 'ru'">{{item.title_ru}}</span>
+                          <span v-if="$i18n.locale == 'en'">{{item.title_en}}</span>
+                          <span v-if="$i18n.locale == 'am'">{{item.title_am}}</span>
                         </v-btn>
+                        <!-- <v-btn v-if="$i18n.locale == 'ru'" exact :to="localePath(item.to)" router color="#303030" style="font-size: 18px; font-weight: 600" text class="nav_button" v-on="on" bottom >
+                          {{item.title_ru}}
+                        </v-btn>
+                        <v-btn v-if="$i18n.locale == 'en'" exact :to="localePath(item.to)" router color="#303030" style="font-size: 18px; font-weight: 600" text class="nav_button" v-on="on" bottom >
+                          {{item.title_en}}
+                        </v-btn>
+                        <v-btn v-if="$i18n.locale == 'am'" exact :to="localePath(item.to)" router color="#303030" style="font-size: 18px; font-weight: 600" text class="nav_button" v-on="on" bottom >
+                          {{item.title_am}}
+                        </v-btn> -->
                       </template>
                     </v-menu>
                   </v-row>
@@ -161,11 +173,20 @@
         for(let menu of this.menus.menus){
           let menusConstruct = JSON.parse(this.menus.menus[0].construction);
           for(let item of menusConstruct){
+            this.$store.dispatch('categories/getCategory', [item.id]).then(function(defs){
+              localStorage.setItem('itemName_en_'+item.id, defs.name_en);
+              localStorage.setItem('itemName_am_'+item.id, defs.name_am);
+              localStorage.setItem('itemName_ru_'+item.id, defs.name_ru);
+            });
             let mainMenu = {
-              title: item.name,
-              to: '/category/' + item.id + '?page=1',
-              items: []
+                // title: item.name,
+                title_en: localStorage.getItem('itemName_en_'+item.id),
+                title_am: localStorage.getItem('itemName_am_'+item.id),
+                title_ru: localStorage.getItem('itemName_ru_'+item.id),
+                to: '/category/' + item.id + '?page=1',
+                items: []
             };
+            
             if(item.menus.length > 0){
               for(let menuItem of item.menus){
                 console.log(menuItem);

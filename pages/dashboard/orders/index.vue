@@ -1,0 +1,248 @@
+<template>
+  <v-container>
+    <v-row justify="center">
+      <v-col lg="10" md="12">
+        <v-data-table
+          :headers="headers"
+          :items="getUserOrders"
+          :single-expand="true"
+          :expanded.sync="expanded"
+          item-key="id"
+          show-expand
+          class="elevation-1"
+        >
+          <template v-slot:item.statusName="{ item }" >
+            <v-card-text class="status_btn" @click="changeStatus" v-if="$i18n.locale == 'ru'">
+              {{item.statusName.value_ru}}
+            </v-card-text>
+            <v-card-text class="status_btn" @click="changeStatus" v-if="$i18n.locale == 'am'">
+              {{item.statusName.value_am}}
+            </v-card-text>
+            <v-card-text class="status_btn" @click="changeStatus" v-if="$i18n.locale == 'en'">
+              {{item.statusName.value}}
+            </v-card-text>
+          </template>
+          <template v-slot:expanded-item="{ headers, item }">
+            <td :colspan="headers.length" style="padding: 0;">
+
+              <v-data-table :headers="ProdHeaders" :items="item.mainProducts" item-key="id" hide-default-footer class="" >
+
+                <template v-slot:item.image="{ item }">
+                  <v-img :src="item.image" :contain="true" width="100" height="100" ></v-img>
+                </template>
+                <template v-slot:item.color="{ item }">
+                  <v-card :color="item.color.toLowerCase()" class="d-flex text-center align-center mx-3" dark height="30" width="30" style="margin: 0 auto !important;" >
+                  </v-card>
+                </template>
+
+              </v-data-table>
+            </td>
+
+          </template>
+          <!-- <template v-slot:item.created_at="{ item }">
+            <v-card-text  style="padding: 0" >{{$dateFns.format(new Date(item.created_at), 'yyyy-MM-dd HH:mm')}}</v-card-text>
+          </template> -->
+        </v-data-table>
+      </v-col>
+    </v-row>
+
+    <div class="modal-backdrop" style="display:none">
+      <div class="modal">
+        <header class="modal-header">
+          <slot name="header">
+            <h2 style="padding: 20px">Change order status</h2>
+          </slot>
+        </header>
+        <section class="modal-body">
+          <slot name="body">
+            <v-col cols="12" >
+              <v-autocomplete id="selectedStatus" v-model="selectedStatus" :items="status" label="Status" item-text="name" item-value="id">
+                <template v-slot:selection="s">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{s.item.value}}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </template>
+                <template v-slot:item="s">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{s.item.value}}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </template>
+              </v-autocomplete>
+            </v-col>
+          </slot>
+        </section>
+        <footer class="modal-footer">
+            <slot name="footer">
+              <button
+                type="button"
+                class="btn-green"
+                @click="close"
+                style="margin-right: 10px"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                class="btn-green"
+                @click="change"
+              >
+                Change
+              </button>
+          </slot>
+        </footer>
+      </div>
+    </div>
+  </v-container>
+</template>
+
+<script>
+    export default {
+      name: "index",
+      layout: 'dashboard',
+      middleware: 'admin',
+      async asyncData({store}) {
+        await store.dispatch('user/getOrders', ["All"]);
+        await store.dispatch('user/getStatus');
+      },
+      data() {
+        return {
+          selectedStatus: '',
+          expanded: [],
+          singleExpand: false,
+          headers: [
+            {text: '#', value: 'id'},
+            {text: 'Name', value: 'name'},
+            {text: 'Address', value: 'address'},
+            {text: 'Buy date', value: 'created_at'},
+            {text: 'Payment Type', value: 'payment_type'},
+            {text: 'Total price', value: 'totalPrice'},
+            {text: 'Status', value: 'statusName'},
+            {text: '', value: 'data-table-expand'},
+          ],
+          ProdHeaders: [
+            {text: this.$t('image'), value: 'image', sortable: false, align: 'start',},
+            {text: this.$t('name'), value: 'name', sortable: false, align: 'center',},
+            {text: this.$t('size'), value: 'size', sortable: false, align: 'center',},
+            {text: this.$t('color'), value: 'color', sortable: false, align: 'center',},
+            {text: this.$t('count'), value: 'count', sortable: false, align: 'center',},
+            {text: this.$t('price'), value: 'price', sortable: false, align: 'center',},
+          ],
+          desserts: [],
+        }
+      },
+      computed: {
+        getUserOrders() {
+          return this.$store.getters['user/orders'];
+        },
+        status() {
+          return this.$store.getters['user/status'];
+        }
+      },
+      async mounted() {
+        await this.$store.dispatch('wishListAndCart/fetch');
+        console.log(this.getUserOrders);
+        for (let el in this.getUserOrders) {
+          for (let elem in this.getUserOrders[el].productItem.data) {
+            this.getUserOrders[el].mainProducts = [];
+            this.getUserOrders[el].mainProducts.push({
+              image: JSON.parse(this.getUserOrders[el].productItem.data[elem].product.images)[0],
+              name: this.getUserOrders[el].productItem.data[elem].product.name_en,
+              size: this.getUserOrders[el].productItem.data[elem].size[0] !== undefined ? this.getUserOrders[el].productItem.data[elem].size[0] : '',
+              color: this.getUserOrders[el].productItem.data[elem].color[0] !== undefined ? this.getUserOrders[el].productItem.data[elem].color[0] : '',
+              count: this.getUserOrders[el].productItem.data[elem].count,
+              price: this.getUserOrders[el].productItem.data[elem].product.price,
+            })
+          }
+        }
+        this.selectedStatus = this.status;
+      },
+      methods: {
+        changeStatus(e) {
+          let id = e.path[2]['cells'][0]['innerText'];
+          document.getElementsByClassName('modal-backdrop')[0].id = id;
+          document.getElementsByClassName('modal-backdrop')[0].style.display = "flex";
+        },
+        close() {
+          document.getElementsByClassName('modal-backdrop')[0].style.display = "none";
+        },
+        change() {
+          let id = document.getElementsByClassName('modal-backdrop')[0].id;
+          this.$store.dispatch('user/changeOrderStatus', [id, this.selectedStatus]);
+          document.location.reload();
+        },
+      }
+    }
+</script>
+
+<style scoped>
+  .status_btn {
+    padding: 0; 
+    cursor: pointer;
+    color: blue;
+    text-decoration-line: underline;
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal {
+    background: #FFFFFF;
+    box-shadow: 2px 2px 20px 1px;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-header,
+  .modal-footer {
+    padding: 15px;
+    display: flex;
+  }
+
+  .modal-header {
+    border-bottom: 1px solid #eeeeee;
+    color: #4AAE9B;
+    justify-content: space-between;
+  }
+
+  .modal-footer {
+    border-top: 1px solid #eeeeee;
+    justify-content: flex-end;
+  }
+
+  .modal-body {
+    position: relative;
+    padding: 20px 10px;
+  }
+
+  .btn-close {
+    border: none;
+    font-size: 20px;
+    padding: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #4AAE9B;
+    background: transparent;
+  }
+
+  .btn-green {
+    color: white;
+    background: #4AAE9B;
+    border: 1px solid #4AAE9B;
+    border-radius: 2px;
+    padding: 5px 10px;
+  }
+</style>

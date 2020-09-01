@@ -21,7 +21,9 @@
         </v-carousel>
       </v-col>
       <v-col md="6" sm="12">
-        <h2 class="text-center">{{product.name}}</h2>
+        <h2 v-if="$i18n.locale === 'en'" class="text-center">{{product.name_en}}</h2>
+        <h2 v-if="$i18n.locale === 'am'" class="text-center">{{product.name_am}}</h2>
+        <h2 v-if="$i18n.locale === 'ru'" class="text-center">{{product.name_ru}}</h2>
         <v-col md="12" lg="12">
           <p>
             {{product.description}}

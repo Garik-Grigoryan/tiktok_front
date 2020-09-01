@@ -2,21 +2,21 @@
     <v-container>
       <v-row>
         <v-col lg="9" md="12">
-                  <v-data-table :headers="headers" :items="desserts" hide-default-footer class="elevation-1" >
-                    <template v-slot:item.image="{ item }">
-                      <v-img :src="item.image" :contain="true" width="100" height="100" ></v-img>
-                    </template>
-                    <template v-slot:item.count="{ item }">
-                      <v-text-field type="number" @input="summCount()" @change="cahngeCount(item)" placeholder="0" v-model="item.count" style="max-width: 60px; margin: 0 auto !important; text-align: center" min="1" ></v-text-field>
-                    </template>
-                    <template v-slot:item.color="{ item }">
-                      <v-card :color="item.color" class="d-flex text-center align-center mx-3" dark height="30" width="30" style="margin: 0 auto !important;" >
-                      </v-card>
-                    </template>
-                    <template v-slot:item.remove="{ item }">
-                      <v-icon  @click="deleteItem(item)">mdi-delete</v-icon>
-                    </template>
-                  </v-data-table>
+          <v-data-table :headers="headers" :items="desserts" hide-default-footer class="elevation-1" >
+            <template v-slot:item.image="{ item }">
+              <v-img :src="item.image" :contain="true" width="100" height="100" ></v-img>
+            </template>
+            <template v-slot:item.count="{ item }">
+              <v-text-field type="number" @input="summCount()" @change="cahngeCount(item)" placeholder="0" v-model="item.count" style="max-width: 60px; margin: 0 auto !important; text-align: center" min="1" ></v-text-field>
+            </template>
+            <template v-slot:item.color="{ item }">
+              <v-card :color="item.color" class="d-flex text-center align-center mx-3" dark height="30" width="30" style="margin: 0 auto !important;" >
+              </v-card>
+            </template>
+            <template v-slot:item.remove="{ item }">
+              <v-icon  @click="deleteItem(item)">mdi-delete</v-icon>
+            </template>
+          </v-data-table>
         </v-col>
         <v-col lg="3" md="12">
           <v-card>
@@ -104,7 +104,7 @@
               </v-list>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn :disabled="!formValid" color="#e60000" dark >
+              <v-btn :disabled="!formValid" @click="buy" color="#e60000" dark>
                 Buy
               </v-btn>
             </v-card-actions>
@@ -202,7 +202,10 @@
         },
         cartData() {
           return this.$store.getters['wishListAndCart/cartData'];
-        }
+        },
+        cartId() {
+          return this.$store.getters['wishListAndCart/cart'];
+        },
       },
       async mounted() {
         await this.$store.dispatch('wishListAndCart/fetch');
@@ -213,15 +216,49 @@
         }
         this.cartData.forEach((elem, key) => {
           console.log(elem);
-          this.desserts.push({
-            image: JSON.parse(elem.product.images)[0],
-            name: elem.product.name,
-            size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-            color: elem.color.length > 0 ? elem.color[0] : '',
-            count: elem.count,
-            price: elem.product.price,
-            remove: key,
-          })
+          if(this.$i18n.locale === 'am'){
+            this.desserts.push({
+              image: JSON.parse(elem.product.images)[0],
+              name: elem.product.name_am,
+              size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
+              color: elem.color.length > 0 ? elem.color[0] : '',
+              count: elem.count,
+              price: elem.product.price,
+              remove: key,
+            });
+          }
+          else if(this.$i18n.locale === 'en'){
+            this.desserts.push({
+              image: JSON.parse(elem.product.images)[0],
+              name: elem.product.name_en,
+              size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
+              color: elem.color.length > 0 ? elem.color[0] : '',
+              count: elem.count,
+              price: elem.product.price,
+              remove: key,
+            });
+          }
+          else if(this.$i18n.locale === 'ru'){
+            this.desserts.push({
+              image: JSON.parse(elem.product.images)[0],
+              name: elem.product.name_ru,
+              size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
+              color: elem.color.length > 0 ? elem.color[0] : '',
+              count: elem.count,
+              price: elem.product.price,
+              remove: key,
+            });
+          } else {
+            this.desserts.push({
+              image: JSON.parse(elem.product.images)[0],
+              name: elem.product.name_en,
+              size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
+              color: elem.color.length > 0 ? elem.color[0] : '',
+              count: elem.count,
+              price: elem.product.price,
+              remove: key,
+            });
+          }
         });
 
         await this.summCount();
@@ -283,11 +320,26 @@
             this.count += parseInt(elem.count);
             this.totalPrice += elem.price * elem.count;
           })
-        }
+        },
+        buy() {
+          if(this.user){
+            this.$store.dispatch('user/buy', [this.user.id, this.cartId, this.totalPrice, this.address, this.payment, this.nameLastName, this.email, this.count, this.phone]).then(() => {
+              this.$store.dispatch('wishListAndCart/emptyCart')
+              this.desserts = [];
+            });
+          }else{
+            this.$store.dispatch('user/buy', [null, this.cartId, this.totalPrice, this.address, this.payment, this.nameLastName, this.email, this.count, this.phone]).then(() => {
+              this.$store.dispatch('wishListAndCart/emptyCart')
+              this.desserts = [];
+            });
+          }
+        },
       }
     }
 </script>
 
 <style scoped>
-
+  .theme--dark.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+    background-color: #272727 !important;
+  }
 </style>

@@ -14,10 +14,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="item in properties" :key="item.name">
-          <td>{{item.name}}</td>
+        <tr v-for="item in properties" :key="item.name_en">
+          <td>{{item.name_en}}</td>
           <td>{{ item.type }}</td>
-          <td><v-btn small :to="`properties/edit/${item.id}`" :elevation="0" dark fab color="primary" ><v-icon>mdi-pencil</v-icon></v-btn> <v-btn small :elevation="0" @click="deleteProperty($event, item.id )" dark fab color="error" ><v-icon>mdi-delete</v-icon></v-btn></td>
+          <td>
+            <v-btn small :to="`properties/edit/${item.id}`" :elevation="0" dark fab color="primary" >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <v-btn small :elevation="0" @click="deleteProperty($event, item.id )" dark fab color="error" >
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </td>
         </tr>
         </tbody>
       </template>

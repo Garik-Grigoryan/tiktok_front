@@ -56,7 +56,6 @@
         async asyncData({store}){
           await store.dispatch('brands/fetch');
           await store.dispatch('menus/fetch');
-          await store.dispatch('user/getOrders', [store.state.auth.user.id]);
         },
         data(){
             return {
@@ -134,6 +133,7 @@
           }
           if(this.user){
             await this.$store.dispatch('wishListAndCart/getWishListAndCartData', [this.user.id]);
+            await store.dispatch('user/getOrders', [this.user.id]);
           } else{
             await this.$store.dispatch('wishListAndCart/getWishListAndCartData', [0]);
           }

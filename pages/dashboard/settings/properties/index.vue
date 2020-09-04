@@ -49,6 +49,9 @@
         return this.$store.getters['properties/properties'];
       }
     },
+    mounted() {
+      console.log(this.properties);
+    },
     methods: {
       deleteProperty(event, id) {
         this.$store.dispatch('properties/delete', [id]).then( r => {

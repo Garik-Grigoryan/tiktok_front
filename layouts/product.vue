@@ -2,7 +2,7 @@
     <v-app dark>
       <v-system-bar fixed app height="50" dark color="#303030" style="justify-content: center; z-index: 5;">
         <v-row justify="space-around" align="center">
-          <v-col cols="4">
+          <v-col lg="4" md="6" sm="6">
             <v-row align="center">
               <v-col cols="2">
                 <v-list-item>
@@ -24,7 +24,7 @@
                   </v-overflow-btn>
                 </v-list-item>
               </v-col>
-              <v-col cols="4" style="display: flex;">
+              <v-col lg="4" md="6" sm="6" style="display: flex; margin-left: 30px;">
                 <v-list-item style="display: flex;">
                   <p style="margin: 0;">
                     +374 77 77 77 77

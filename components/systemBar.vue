@@ -4,7 +4,11 @@
       <v-list>
         <v-list-item v-for="(item, i) in rightSide" :key="i" :to="item.to" router exact >
           <v-list-item-content >
-            <v-list-item-title v-text="item.title" />
+            <!-- <v-list-item-title v-text="item.title" /> -->
+            <v-list-item-title v-if="item.title === 'Delivery conditions' || item.title === 'About us'" v-text="item.title"/>
+            <v-list-item-title v-if="$i18n.locale == 'ru'" v-text="item.title_ru"/>
+            <v-list-item-title v-if="$i18n.locale == 'en'" v-text="item.title_en"/>
+            <v-list-item-title v-if="$i18n.locale == 'am'" v-text="item.title_am"/>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -40,15 +44,6 @@
                           <span v-if="$i18n.locale == 'en'">{{item.title_en}}</span>
                           <span v-if="$i18n.locale == 'am'">{{item.title_am}}</span>
                         </v-btn>
-                        <!-- <v-btn v-if="$i18n.locale == 'ru'" exact :to="localePath(item.to)" router color="#303030" style="font-size: 18px; font-weight: 600" text class="nav_button" v-on="on" bottom >
-                          {{item.title_ru}}
-                        </v-btn>
-                        <v-btn v-if="$i18n.locale == 'en'" exact :to="localePath(item.to)" router color="#303030" style="font-size: 18px; font-weight: 600" text class="nav_button" v-on="on" bottom >
-                          {{item.title_en}}
-                        </v-btn>
-                        <v-btn v-if="$i18n.locale == 'am'" exact :to="localePath(item.to)" router color="#303030" style="font-size: 18px; font-weight: 600" text class="nav_button" v-on="on" bottom >
-                          {{item.title_am}}
-                        </v-btn> -->
                       </template>
                     </v-menu>
                   </v-row>

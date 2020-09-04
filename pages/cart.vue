@@ -9,10 +9,10 @@
             <template v-slot:item.count="{ item }">
               <v-text-field type="number" @input="summCount()" @change="cahngeCount(item)" placeholder="0" v-model="item.count" style="max-width: 60px; margin: 0 auto !important; text-align: center" min="1" ></v-text-field>
             </template>
-            <template v-slot:item.color="{ item }">
+            <!-- <template v-slot:item.color="{ item }">
               <v-card :color="item.color" class="d-flex text-center align-center mx-3" dark height="30" width="30" style="margin: 0 auto !important;" >
               </v-card>
-            </template>
+            </template> -->
             <template v-slot:item.remove="{ item }">
               <v-icon  @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
@@ -135,12 +135,12 @@
     export default {
       async fetch({store}){
         await store.dispatch('brands/fetch');
-        // await store.dispatch('wishListAndCart/fetch');
-        // if(this.user){
-        //   await store.dispatch('wishListAndCart/getWishListAndCartData', [this.user.id]);
-        // }else{
-        //   await store.dispatch('wishListAndCart/getWishListAndCartData', [0]);
-        // }
+        await store.dispatch('wishListAndCart/fetch');
+        if(this.user){
+          await store.dispatch('wishListAndCart/getWishListAndCartData', [this.user.id]);
+        }else{
+          await store.dispatch('wishListAndCart/getWishListAndCartData', [0]);
+        }
         await store.dispatch('menus/fetch');
       },
       name: "cart",
@@ -178,8 +178,9 @@
             headers: [
               { text: 'Image', value: 'image',  sortable: false,  align: 'start', },
               { text: 'Name',value: 'name',  sortable: false,  align: 'center', },
-              { text: 'Size', value: 'size',  sortable: false,  align: 'center', },
-              { text: 'Color', value: 'color',  sortable: false,  align: 'center', },
+              // { text: 'Size', value: 'size',  sortable: false,  align: 'center', },
+              // { text: 'Color', value: 'color',  sortable: false,  align: 'center', },
+              { text: 'Properties', value: 'properties',  sortable: false,  align: 'center', },
               { text: 'Count', value: 'count',  sortable: false,  align: 'center', },
               { text: 'Price', value: 'price',  sortable: false,  align: 'center', },
               { text: 'Remove', value: 'remove',  sortable: false,  align: 'center', },
@@ -187,6 +188,9 @@
             desserts: [
 
             ],
+            elem_properties_am : "",
+            elem_properties_en : "",
+            elem_properties_ru : "",
           }
       },
       computed: {
@@ -214,14 +218,39 @@
         }else{
           await this.$store.dispatch('wishListAndCart/getWishListAndCartData', [0]);
         }
+
         this.cartData.forEach((elem, key) => {
           console.log(elem);
+          for(let i = 0; i < elem.properties.length; i++) {
+            if(elem.properties[i].value_en !== undefined) {
+              if(i !== elem.properties.length-1) {
+                this.elem_properties_am += elem.properties[i].property_name_am  + ": " + elem.properties[i].value_am + "; ";
+                this.elem_properties_ru += elem.properties[i].property_name_ru  + ": " + elem.properties[i].value_ru + "; ";
+                this.elem_properties_en += elem.properties[i].property_name_en  + ": " + elem.properties[i].value_en + "; ";
+              } else {
+                this.elem_properties_am += elem.properties[i].property_name_am  + ": " + elem.properties[i].value_am;
+                this.elem_properties_ru += elem.properties[i].property_name_ru  + ": " + elem.properties[i].value_ru;
+                this.elem_properties_en += elem.properties[i].property_name_en  + ": " + elem.properties[i].value_en;
+              }
+            } else {
+              if(i !== elem.properties.length-1) {
+                this.elem_properties_am += elem.properties[i].property_name_am  + ": " + elem.properties[i].value + "; ";
+                this.elem_properties_ru += elem.properties[i].property_name_ru  + ": " + elem.properties[i].value + "; ";
+                this.elem_properties_en += elem.properties[i].property_name_en  + ": " + elem.properties[i].value + "; ";
+              } else {
+                this.elem_properties_am += elem.properties[i].property_name_am  + ": " + elem.properties[i].value;
+                this.elem_properties_ru += elem.properties[i].property_name_ru  + ": " + elem.properties[i].value;
+                this.elem_properties_en += elem.properties[i].property_name_en  + ": " + elem.properties[i].value;
+              }
+            }
+          }
           if(this.$i18n.locale === 'am'){
             this.desserts.push({
               image: JSON.parse(elem.product.images)[0],
               name: elem.product.name_am,
-              size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-              color: elem.color.length > 0 ? elem.color[0] : '',
+              // size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
+              // color: elem.color.length > 0 ? elem.color[0] : '',
+              properties: this.elem_properties_am,
               count: elem.count,
               price: elem.product.price,
               remove: key,
@@ -231,8 +260,9 @@
             this.desserts.push({
               image: JSON.parse(elem.product.images)[0],
               name: elem.product.name_en,
-              size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-              color: elem.color.length > 0 ? elem.color[0] : '',
+              // size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
+              // color: elem.color.length > 0 ? elem.color[0] : '',
+              properties: this.elem_properties_en,
               count: elem.count,
               price: elem.product.price,
               remove: key,
@@ -242,8 +272,9 @@
             this.desserts.push({
               image: JSON.parse(elem.product.images)[0],
               name: elem.product.name_ru,
-              size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-              color: elem.color.length > 0 ? elem.color[0] : '',
+              // size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
+              // color: elem.color.length > 0 ? elem.color[0] : '',
+              properties: this.elem_properties_ru,
               count: elem.count,
               price: elem.product.price,
               remove: key,
@@ -252,14 +283,17 @@
             this.desserts.push({
               image: JSON.parse(elem.product.images)[0],
               name: elem.product.name_en,
-              size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-              color: elem.color.length > 0 ? elem.color[0] : '',
+              // size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
+              // color: elem.color.length > 0 ? elem.color[0] : '',
+              properties: this.elem_properties_en,
               count: elem.count,
               price: elem.product.price,
               remove: key,
             });
           }
         });
+
+        console.log(this.desserts);
 
         await this.summCount();
       },
@@ -270,9 +304,10 @@
             console.log(key);
             this.desserts.push({
               image: JSON.parse(elem.product.images)[0],
-              name: elem.product.name,
-              size: elem.size[0] !== undefined ? elem.size[0] : '',
-              color: elem.color[0] !== undefined ? elem.color[0] : '',
+              name: elem.product.name_en,
+              // size: elem.size[0] !== undefined ? elem.size[0] : '',
+              // color: elem.color[0] !== undefined ? elem.color[0] : '',
+              properties: elem.properties[0].property_name_en,
               count: elem.count,
               price: elem.product.price,
               remove: key,

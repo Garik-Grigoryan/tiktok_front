@@ -58,11 +58,11 @@ export const actions = {
     commit('setProductByBrand', products)
   },
   async getProductByCategoryId({commit}, [id, page]){
-    const products = await this.$axios.$get(`http://tiktokback.neoteric-software.com/api/product/getByCategoryId/${id}?page=${page}`);
+    const products = await this.$axios.$get(`http://localhost:8000/api/product/getByCategoryId/${id}?page=${page}`);
     commit('setProductByCategory', products)
   },
   async getCategoryFilters({commit}, [id]){
-    const brandFilters = await this.$axios.$get(`http://tiktokback.neoteric-software.com/api/product/getCategoryFilters/${id}`);
+    const brandFilters = await this.$axios.$get(`http://localhost:8000/api/product/getCategoryFilters/${id}`);
     commit('setCategoryFilters', brandFilters)
   },
   async Filter({commit}, [filter, priceRange, brand, page = 0]){
@@ -70,7 +70,7 @@ export const actions = {
     commit('setProductByBrand', filteredProducts)
   },
   async FilterByCategory({commit}, [filter, priceRange, category, page = 0]){
-    const filteredProducts = await this.$axios.$post(`http://tiktokback.neoteric-software.com/api/product/filterByCategory`, {'filters': filter, 'priceRange': priceRange, 'category': category, 'page': page});
+    const filteredProducts = await this.$axios.$post(`http://localhost:8000/api/product/filterByCategory`, {'filters': filter, 'priceRange': priceRange, 'category': category, 'page': page});
     commit('setProductByCategory', filteredProducts)
   },
   async getProductsByIds({commit}, [ids]){

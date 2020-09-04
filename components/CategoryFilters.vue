@@ -16,7 +16,7 @@
           <v-list-item-content>
             <v-list-item-title>{{ item.title }}</v-list-item-title>
               <div v-if="item.type === 'color'">
-                <v-item-group :multiple="true" >
+                <!-- <v-item-group :multiple="true" >
                   <v-row class="colors">
                     <v-item  v-for="(color, n) in item.data"  :key="n" v-slot:default="{ active, toggle }">
                       <v-card  :color="color.toLowerCase()" class="d-flex text-center align-center mx-3" dark height="30" :data-value="color.toLowerCase()" width="30" @click="toggle(), filter($event)" >
@@ -26,7 +26,7 @@
                       </v-card>
                     </v-item>
                   </v-row>
-                </v-item-group>
+                </v-item-group> -->
               </div>
               <v-combobox v-else @change="filter($event)" v-model="item.select" :items="item.data" label="" dense chips small-chips multiple >
 
@@ -46,28 +46,38 @@
         drawer: true,
         items: [
           { title: 'Sex', icon: 'mdi-home-city', data: ['Men', 'Women',], select: [], type: 'sex' },
-          { title: 'Size', icon: 'mdi-account', data: [], select: [], type: 'size'},
-          { title: 'Color', icon: 'mdi-account-group-outline', data: [], select: [], type: 'color'},
+          // { title: 'Size', icon: 'mdi-account', data: [], select: [], type: 'size'},
+          // { title: 'Color', icon: 'mdi-account-group-outline', data: [], select: [], type: 'color'},
         ],
         select: [],
         mini: false,
       }
     },
-    mounted() {
-      for(let elem in this.filters.colors){
-        if(elem != ''){
-          this.items[2].data.push(elem)
+    async mounted() {
+      await this.$store.dispatch('properties/fetch');
+      for(let i = 0; i < this.properties.length; i++) {
+        let values = [];
+        for(let j = 0; j < this.properties[i].property_values.length; j++) {
+            values.push(this.properties[i].property_values[j].value_am);
+        }
+        if(this.properties[i].property_values.length !== 0) {
+          this.items.push({ title: this.properties[i].name_en, id: this.properties[i].id, icon: 'mdi-account', data: values, select: []});
         }
       }
-      for(let elem in this.filters.sizes){
-        if(elem != ''){
-          console.log(elem);
-          this.items[1].data.push(elem)
-        }
-      }
+      // for(let elem in this.filters.colors){
+      //   if(elem != ''){
+      //     this.items[2].data.push(elem)
+      //   }
+      // }
+      // for(let elem in this.filters.sizes){
+      //   if(elem != ''){
+      //     console.log(elem);
+      //     this.items[1].data.push(elem)
+      //   }
+      // }
       this.min = this.filters.minPrice;
       this.max = this.filters.maxPrice;
-      this.range = [this.filters.minPrice, this.filters.maxPrice]
+      this.range = [this.filters.minPrice, this.filters.maxPrice];
     },
     methods: {
       filter(e) {
@@ -75,18 +85,37 @@
           if(e.target.tagName === 'DIV' || e.target.tagName === 'I'){
             if(e.target.tagName === 'I'){
               this.$delete(this.items[2].select, this.items[2].select.indexOf(e.target.getAttribute('data-value')));
-            }else{
+              console.log(this.items[2].select);
+            } else {
               this.items[2].select.push(e.target.getAttribute('data-value'));
+              console.log(this.items[2].select);
             }
           }
         }
-       this.$cookies.set('armmall_filter', [this.items, this.range, this.$route.params.id], {
-         path: '/',
-         maxAge: 10 * 365 * 24 * 60 * 60
-       });
-        this.$store.dispatch('products/FilterByCategory', [this.items, this.range, this.$route.params.id]).then(r => {
-          // this.$router.push('/dashboard/categories')
-        })
+        
+        // this.$cookies.set('armmall_filter', [this.items, this.range, this.$route.params.id], {
+        //   path: '/',
+        //   maxAge: 10 * 365 * 24 * 60 * 60
+        // });
+        var properties = [];
+        var values = [];
+        for(let i = 0; i < this.items.length; i++) {
+            values = [];
+            if(this.items[i].select.length !== 0) {
+              for(let j = 0; j < this.items[i].select.length; j++) {
+                values.push(this.items[i].select[j]);
+              }
+              if(this.items[i].id !== undefined) {
+                properties.push({'propertyID': this.items[i].id, 'values': values});
+              } else {
+                properties.push({'title': this.items[i].title, 'values': values});
+              }
+            }
+        }
+        this.$cookies.set("armmall_filter", JSON.stringify({'items': JSON.stringify(properties), 'range': JSON.stringify(this.range), 'id': this.$route.params.id}), 10 * 365 * 24 * 60 * 60);
+        // this.$store.dispatch('products/FilterByCategory', [this.items, this.range, this.$route.params.id]).then(r => {
+        //   // this.$router.push('/dashboard/categories')
+        // })
       }
     },
     computed: {
@@ -95,6 +124,9 @@
       },
       filters() {
         return this.$store.getters['products/categoryFilter'];
+      },
+      properties() {
+        return this.$store.getters['properties/properties'];
       }
     }
   }

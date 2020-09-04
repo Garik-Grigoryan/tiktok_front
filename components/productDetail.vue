@@ -28,7 +28,89 @@
           <p>
             {{product.description}}
           </p>
-          <div class="mt-5">
+          <div>
+            <v-item-group>
+                <v-item  v-for="(property, n) in productProperties" :key="n">
+                  <div
+                    :data-value="property"
+                  >
+                    <span v-if="$i18n.locale == 'ru'"><strong>{{property.property_name_ru}}: </strong></span>
+                    <span v-if="$i18n.locale == 'en'"><strong>{{property.property_name_en}}: </strong></span>
+                    <span v-if="$i18n.locale == 'am'"><strong>{{property.property_name_am}}: </strong></span>
+                    <span v-if="property.value_en !== undefined">
+                        <span v-if="$i18n.locale == 'ru'"> {{property.value_ru}} </span>
+                        <span v-if="$i18n.locale == 'en'"> {{property.value_en}} </span>
+                        <span v-if="$i18n.locale == 'am'"> {{property.value_am}} </span>
+                    </span>
+                    <span v-if="property.value_en == undefined">
+                      {{property.value}}
+                    </span>
+                  </div>
+                </v-item>
+            </v-item-group>
+          </div>
+          <!-- <v-row>
+            <v-col cols="12" v-for="(property, i) in selectedProperties" :key="i" class=" d-flex child-flex" >
+              <v-row>
+                <v-col cols="6">
+                  <v-select @change="changeProp($event)" v-model="property.property" :items="properties"  chips label="Sizes" item-value="id">
+                    <template v-slot:selection="prop">
+                      <v-chip>
+                        <span v-if="$i18n.locale == 'ru'">{{ prop.item.name_ru }}</span>
+                        <span v-if="$i18n.locale == 'am'">{{ prop.item.name_am }}</span>
+                        <span v-if="$i18n.locale == 'en'">{{ prop.item.name_en }}</span>
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="prop">
+                      <v-list-item-content>
+                        <v-list-item-title v-if="$i18n.locale == 'am'">
+                          {{prop.item.name_am}}
+                        </v-list-item-title>
+                        <v-list-item-title v-if="$i18n.locale == 'en'">
+                          {{prop.item.name_en}}
+                        </v-list-item-title>
+                        <v-list-item-title v-if="$i18n.locale == 'ru'">
+                          {{prop.item.name_ru}}
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </v-select>
+                </v-col>
+                <v-col cols="5">
+                  <v-text-field v-if="property.type === 'Text'" v-model="property.value" :rules="nameRules" label="Name" required ></v-text-field>
+                  <v-select v-if="property.type === 'Selection'" v-model="property.value" :items="property.values"  chips label="Values" item-value="id">
+                    <template v-slot:selection="prop">
+                      <v-chip>
+                        <span v-if="$i18n.locale == 'ru'">{{ prop.item.value_ru }}</span>
+                        <span v-if="$i18n.locale == 'am'">{{ prop.item.value_am }}</span>
+                        <span v-if="$i18n.locale == 'en'">{{ prop.item.value_en }}</span>
+                      </v-chip>
+                    </template>
+                    <template v-slot:item="prop">
+                      <v-list-item-content>
+                        <v-list-item-title v-if="$i18n.locale == 'am'">
+                          {{prop.item.value_am}}
+                        </v-list-item-title>
+                        <v-list-item-title v-if="$i18n.locale == 'en'">
+                          {{prop.item.value_en}}
+                        </v-list-item-title>
+                        <v-list-item-title v-if="$i18n.locale == 'ru'">
+                          {{prop.item.value_ru}}
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </v-select>
+                </v-col>
+                <v-col cols="1"><v-btn small :elevation="0" @click="deleteProperty($event, i)" dark fab color="error" ><v-icon>mdi-delete</v-icon></v-btn></v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="1">
+              <v-card @click.stop="addProperty" class="mx-auto add_iamge" min-height="50" max-width="50" >
+                <v-icon size="25">mdi-plus</v-icon>
+              </v-card>
+            </v-col>
+          </v-row> -->
+          <!-- <div class="mt-5">
             <p class="ma-0">Colors</p>
             <v-item-group
               :multiple="false"
@@ -58,8 +140,8 @@
                 </v-item>
               </v-row>
             </v-item-group>
-          </div>
-          <div class="mt-5">
+          </div> -->
+          <!-- <div class="mt-5">
             <p class="ma-0">Sizes</p>
             <v-item-group
               :multiple="false"
@@ -80,7 +162,7 @@
                 </v-item>
               </v-row>
             </v-item-group>
-          </div>
+          </div> -->
 
           <div class="mt-5 pl-0">
             <p class="ma-0">Count</p>
@@ -110,14 +192,14 @@
               >
                 <v-icon left>mdi-cart</v-icon> Cart
               </v-btn>
-              <v-btn
+              <!-- <v-btn
                 color="#ff0057"
                 class="white--text"
                 rounded
                 @click="addToWishlist($event, product.id)"
               >
                 <v-icon left>mdi-heart</v-icon> Wish list
-              </v-btn>
+              </v-btn> -->
             </div>
           </div>
         </v-col>
@@ -129,17 +211,40 @@
 <script>
 
   export default {
+    async fetch({store}) {
+      await store.dispatch('properties/fetch')
+    },
     data () {
       return {
         productColors: [],
         productSizes: [],
         selectedColor: [],
         selectedSize: [],
+        productProperties: [],
         cycle: false,
         count: 1,
+        nameRules: [
+          v => !!v || 'Field is required',
+        ],
       }
     },
     mounted() {
+      this.$store.dispatch('properties/productProperty', [this.product.id]).then(function(defs){
+        let properties = [];
+        defs.forEach(elem => {
+          let value_en, value_am, value_ru = "";
+          for(let i = 0; i < elem.propertyValues.length; i++) {
+            if(elem.propertyValues[i].id == elem.productProperty.propertyValue) {
+              value_en = elem.propertyValues[i].value_en;
+              value_ru = elem.propertyValues[i].value_ru;
+              value_am = elem.propertyValues[i].value_am;
+            }
+          }
+          properties.push({'property_name_en': elem.propertyData.name_en, 'property_name_am': elem.propertyData.name_am, 'property_name_ru': elem.propertyData.name_ru, 'type': elem.propertyData.type, 'value': elem.productProperty.propertyValue, 'value_en': value_en, 'value_am': value_am, 'value_ru': value_ru});
+        });
+        localStorage.setItem('productProperties', JSON.stringify(properties));
+      });
+      this.productProperties = JSON.parse(localStorage.getItem('productProperties'));
       this.product.product_color.forEach(elem => {
         this.productColors.push(elem.color)
       });
@@ -147,7 +252,6 @@
         this.productSizes.push(elem.name)
       });
     },
-
     methods: {
       addToWishlist(e, id) {
         let user_id = 0;
@@ -161,7 +265,8 @@
         if(this.user){
           user_id = this.user.id
         }
-        this.$store.dispatch('wishListAndCart/setCArt', [id, user_id, this.selectedColor, this.selectedSize, this.count])
+        // this.$store.dispatch('wishListAndCart/setCArt', [id, user_id, this.selectedColor, this.selectedSize, this.count])
+        this.$store.dispatch('wishListAndCart/setCArt', [id, user_id, this.productProperties, this.count]);
       },
       selectColor(e) {
         if(e.target !== undefined){
@@ -184,11 +289,14 @@
              this.selectedSize.push(e.target.getAttribute('data-value'));
            }
         }
-      }
+      },
     },
     computed: {
       product() {
         return this.$store.getters['products/product'];
+      },
+      properties() {
+        return this.$store.getters['properties/properties'];
       }
     },
   }
@@ -196,5 +304,12 @@
 <style scoped>
   i{
     font-size: 30px !important;
+  }
+
+  .add_iamge i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 </style>

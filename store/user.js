@@ -31,10 +31,10 @@ export const actions = {
   },
   async getOrders({commit}, [userId]){
     if(userId == 'All'){
-      let orders = await this.$axios.$get('http://tiktokback.neoteric-software.com/api/order/get/');
+      let orders = await this.$axios.$get('http://localhost:8000/api/order/get/');
       commit('setOrders', orders);
     }else{
-      let orders = await this.$axios.$get('http://tiktokback.neoteric-software.com/api/order/get/'+userId);
+      let orders = await this.$axios.$get('http://localhost:8000/api/order/get/'+userId);
       commit('setOrders', orders);
     }
   },

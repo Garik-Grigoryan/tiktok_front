@@ -79,7 +79,7 @@
 
 <style lang="sass" scoped>
   .cookie
-    z-index: 1
+    z-index: 5
     position: fixed
     bottom: 0
     width: 100%

@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-container>
+      <input id="filter_data" type="hidden" value="">
       <v-row v-if="$i18n.locale === 'en'" justify="center">
         <productCard
           v-for="(product, i) in products.products"
@@ -58,7 +59,6 @@
       await store.dispatch('wishListAndCart/fetch');
       await store.dispatch('menus/fetch');
       await store.dispatch('products/getCategoryFilters', [route.params.id]);
-
     },
     layout: 'category',
     components: {
@@ -74,6 +74,16 @@
         return this.$store.getters['products/productByCategory'];
       },
     },
+    async mounted() {
+      if(this.$cookies.get('armmall_filter') !== undefined && this.$cookies.get('armmall_filter') !== "") {
+        await this.$store.dispatch('products/FilterByCategory', [JSON.parse(this.$cookies.get('armmall_filter').items), JSON.parse(this.$cookies.get('armmall_filter').range), this.$cookies.get('armmall_filter').id]);
+        console.log(this.products);
+        document.getElementById('filter_data').value = JSON.stringify(this.$cookies.get('armmall_filter'));
+        console.log(JSON.parse(this.$cookies.get('armmall_filter').items));
+        console.log(JSON.parse(this.$cookies.get('armmall_filter').range));
+        console.log(this.$cookies.get('armmall_filter').id);
+      }
+    },
     beforeRouteLeave (to, from, next) {
       this.$cookies.set('armmall_filter', [], {
         path: '/',
@@ -84,6 +94,7 @@
     methods:{
       next() {
         let cookieRes = this.$cookies.get('armmall_filter');
+        
         if(cookieRes[2] === this.$route.params.id){
           cookieRes.push(this.page);
           this.$store.dispatch('products/FilterByCategory', cookieRes).then(r => {

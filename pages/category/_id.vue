@@ -75,14 +75,12 @@
       },
     },
     async mounted() {
-      if(this.$cookies.get('armmall_filter') !== undefined && this.$cookies.get('armmall_filter') !== "") {
-        await this.$store.dispatch('products/FilterByCategory', [JSON.parse(this.$cookies.get('armmall_filter').items), JSON.parse(this.$cookies.get('armmall_filter').range), this.$cookies.get('armmall_filter').id]);
-        console.log(this.products);
-        document.getElementById('filter_data').value = JSON.stringify(this.$cookies.get('armmall_filter'));
-        console.log(JSON.parse(this.$cookies.get('armmall_filter').items));
-        console.log(JSON.parse(this.$cookies.get('armmall_filter').range));
-        console.log(this.$cookies.get('armmall_filter').id);
-      }
+      // await this.$store.dispatch('wishListAndCart/fetch');
+      // if(this.user){
+      //   await this.$store.dispatch('wishListAndCart/getWishListAndCartData', [this.user.id]);
+      // }else{
+      //   await this.$store.dispatch('wishListAndCart/getWishListAndCartData', [0]);
+      // }
     },
     beforeRouteLeave (to, from, next) {
       this.$cookies.set('armmall_filter', [], {
@@ -94,14 +92,19 @@
     methods:{
       next() {
         let cookieRes = this.$cookies.get('armmall_filter');
-        
-        if(cookieRes[2] === this.$route.params.id){
-          cookieRes.push(this.page);
-          this.$store.dispatch('products/FilterByCategory', cookieRes).then(r => {
-          })
-        }else{
+        if(cookieRes !== undefined && cookieRes.id === this.$route.params.id) {
+          this.$store.dispatch('products/FilterByCategory', [JSON.parse(cookieRes.items), JSON.parse(cookieRes.range), cookieRes.id, this.page]);
+        } else{
           this.$router.push({ query: { page: this.page } });
         }
+        
+        // if(cookieRes[2] === this.$route.params.id){
+        //   cookieRes.push(this.page);
+        //   this.$store.dispatch('products/FilterByCategory', cookieRes).then(r => {
+        //   })
+        // }else{
+        //   this.$router.push({ query: { page: this.page } });
+        // }
       }
     },
   }

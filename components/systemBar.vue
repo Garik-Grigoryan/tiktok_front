@@ -14,7 +14,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :height="100"  color="#fff" style="justify-content: center; flex-wrap: wrap;" id="create" app clipped-left>
-            <v-col :lg="9" md="12" class="py-0">
+            <v-col :lg="10" md="12" class="py-0">
               <v-row align="center" justify="space-between" style="position: relative">
                 <v-col md="2" sm="3" cols="5" class="text-center py-0">
                   <nuxt-link :to="localePath('/')" style="text-decoration: none;">
@@ -22,23 +22,23 @@
                     <h1 style="color: #000;">TikTok</h1>
                   </nuxt-link>
                 </v-col>
-                <v-col cols="4" class="pa-0">
+                <v-col cols="3" class="pa-0">
                   <v-row justify="end" class="hidden-sm-and-down" no-gutters >
                     <v-menu :open-on-hover="true" bottom offset-y v-for="(item, i) in leftSide" dark :key="i">
                       <template v-slot:activator="{ on }">
-                        <v-btn exact :to="localePath(item.to)" router color="#303030" style="font-size: 18px; font-weight: 600" text class="nav_button" v-on="on" bottom >
+                        <v-btn exact :to="localePath(item.to)" router color="#303030" style="font-size: 16px; font-weight: 600" text class="nav_button" v-on="on" bottom >
                           {{item.title}}
                         </v-btn>
                       </template>
                     </v-menu>
                   </v-row>
                 </v-col>
-                <v-col cols="6" class="pa-0">
+                <v-col cols="7" class="pa-0">
                   <v-row justify="start" class="hidden-sm-and-down" no-gutters >
 
                     <v-menu :open-on-hover="true" bottom offset-y v-for="(item, i) in rightSide" dark :key="i">
                       <template v-slot:activator="{ on }">
-                        <v-btn exact :to="localePath(item.to)" router color="#303030" style="font-size: 18px; font-weight: 600" text class="nav_button" v-on="on" bottom >
+                        <v-btn exact :to="localePath(item.to)" router color="#303030" style="font-size: 16px; font-weight: 600" text class="nav_button" v-on="on" bottom >
                           <span v-if="item.title === 'Delivery conditions' || item.title === 'About us'">{{item.title}}</span>
                           <span v-if="$i18n.locale == 'ru'">{{item.title_ru}}</span>
                           <span v-if="$i18n.locale == 'en'">{{item.title_en}}</span>

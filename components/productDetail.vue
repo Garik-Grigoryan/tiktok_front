@@ -29,29 +29,18 @@
           <p>
             {{product.description}}
           </p>
-          <div>
-            <v-item-group>
-                <v-item  v-for="(property, n) in productProperties" :key="n">
-                  <div
-                    :data-value="property"
-                  >
-                    <span v-if="$i18n.locale == 'ru'"><strong>{{property.property_name_ru}}: </strong></span>
-                    <span v-else-if="$i18n.locale == 'en'"><strong>{{property.property_name_en}}: </strong></span>
-                    <span v-else-if="$i18n.locale == 'am'"><strong>{{property.property_name_am}}: </strong></span>
-                    <span v-else><strong>{{property.property_name_en}}: </strong></span>
-                    <span v-if="property.value_en !== undefined">
-                        <span v-if="$i18n.locale == 'ru'"> {{property.value_ru}} </span>
-                        <span v-else-if="$i18n.locale == 'en'"> {{property.value_en}} </span>
-                        <span v-else-if="$i18n.locale == 'am'"> {{property.value_am}} </span>
-                        <span v-else> {{property.value_am}} </span>
-                    </span>
-                    <span v-if="property.value_en == undefined">
-                      {{property.value}}
-                    </span>
-                  </div>
-                </v-item>
-            </v-item-group>
-          </div>
+          <template>
+            <v-data-table
+              :headers="headers"
+              :items="productProperties"
+              item-key="name"
+              class="elevation-1"
+              hide-default-footer
+              hide-default-header
+            ></v-data-table>
+          </template>
+
+
           <!-- <v-row>
             <v-col cols="12" v-for="(property, i) in selectedProperties" :key="i" class=" d-flex child-flex" >
               <v-row>
@@ -223,16 +212,24 @@
         productSizes: [],
         selectedColor: [],
         selectedSize: [],
-        productProperties: [],
         cycle: false,
         count: 1,
         nameRules: [
           v => !!v || 'Field is required',
         ],
+        headers: [
+          {
+            text: 'Property',
+            align: 'start',
+            value: 'name',
+          },
+          { text: 'Value', value: 'property' },
+        ],
+        productProperties: [],
       }
     },
-    mounted() {
-      this.$store.dispatch('properties/productProperty', [this.product.id]).then(function(defs){
+    async mounted() {
+      await this.$store.dispatch('properties/productProperty', [this.product.id]).then(function(defs){
         let properties = [];
         defs.forEach(elem => {
           let value_en, value_am, value_ru = "";
@@ -247,13 +244,32 @@
         });
         localStorage.setItem('productProperties', JSON.stringify(properties));
       });
-      this.productProperties = JSON.parse(localStorage.getItem('productProperties'));
-      this.product.product_color.forEach(elem => {
-        this.productColors.push(elem.color)
-      });
-      this.product.product_size.forEach(elem => {
-        this.productSizes.push(elem.name)
-      });
+      let prodProp = JSON.parse(localStorage.getItem('productProperties'));
+      for(let j = 0; j < prodProp.length; j++) {
+        if(prodProp[j].value_en !== undefined) {
+          this.productProperties.push({
+            name: prodProp[j].property_name_am,
+            // name_am: prodProp[j].property_name_am,
+            // name_ru: prodProp[j].property_name_ru,
+            property: prodProp[j].value_am,
+            // property_am: prodProp[j].value_am,
+            // property_ru: prodProp[j].value_ru,
+          });
+        } else {
+          this.productProperties.push({
+            name: prodProp[j].property_name_am,
+            // name_am: prodProp[j].property_name_am,
+            // name_ru: prodProp[j].property_name_ru,
+            property: prodProp[j].value,
+          });
+        }
+      }
+      // this.product.product_color.forEach(elem => {
+      //   this.productColors.push(elem.color)
+      // });
+      // this.product.product_size.forEach(elem => {
+      //   this.productSizes.push(elem.name)
+      // });
     },
     methods: {
       addToWishlist(e, id) {

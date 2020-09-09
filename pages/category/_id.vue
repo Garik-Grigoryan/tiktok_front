@@ -12,7 +12,7 @@
           :price="product.price"
         ></productCard>
       </v-row>
-      <v-row v-if="$i18n.locale === 'am'" justify="center">
+      <v-row v-else-if="$i18n.locale === 'am'" justify="center">
         <productCard
           v-for="(product, i) in products.products"
           :key="i"
@@ -22,13 +22,23 @@
           :price="product.price"
         ></productCard>
       </v-row>
-      <v-row v-if="$i18n.locale === 'ru'" justify="center">
+      <v-row v-else-if="$i18n.locale === 'ru'" justify="center">
         <productCard
           v-for="(product, i) in products.products"
           :key="i"
           :image="JSON.parse(product.images)[0]"
           :id="product.id"
           :title="product.name_ru"
+          :price="product.price"
+        ></productCard>
+      </v-row>
+      <v-row v-else justify="center">
+        <productCard
+          v-for="(product, i) in products.products"
+          :key="i"
+          :image="JSON.parse(product.images)[0]"
+          :id="product.id"
+          :title="product.name_en"
           :price="product.price"
         ></productCard>
       </v-row>

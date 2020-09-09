@@ -22,8 +22,9 @@
       </v-col>
       <v-col md="6" sm="12">
         <h2 v-if="$i18n.locale === 'en'" class="text-center">{{product.name_en}}</h2>
-        <h2 v-if="$i18n.locale === 'am'" class="text-center">{{product.name_am}}</h2>
-        <h2 v-if="$i18n.locale === 'ru'" class="text-center">{{product.name_ru}}</h2>
+        <h2 v-else-if="$i18n.locale === 'am'" class="text-center">{{product.name_am}}</h2>
+        <h2 v-else-if="$i18n.locale === 'ru'" class="text-center">{{product.name_ru}}</h2>
+        <h2 v-else class="text-center">{{product.name_en}}</h2>
         <v-col md="12" lg="12">
           <p>
             {{product.description}}
@@ -35,12 +36,14 @@
                     :data-value="property"
                   >
                     <span v-if="$i18n.locale == 'ru'"><strong>{{property.property_name_ru}}: </strong></span>
-                    <span v-if="$i18n.locale == 'en'"><strong>{{property.property_name_en}}: </strong></span>
-                    <span v-if="$i18n.locale == 'am'"><strong>{{property.property_name_am}}: </strong></span>
+                    <span v-else-if="$i18n.locale == 'en'"><strong>{{property.property_name_en}}: </strong></span>
+                    <span v-else-if="$i18n.locale == 'am'"><strong>{{property.property_name_am}}: </strong></span>
+                    <span v-else><strong>{{property.property_name_en}}: </strong></span>
                     <span v-if="property.value_en !== undefined">
                         <span v-if="$i18n.locale == 'ru'"> {{property.value_ru}} </span>
-                        <span v-if="$i18n.locale == 'en'"> {{property.value_en}} </span>
-                        <span v-if="$i18n.locale == 'am'"> {{property.value_am}} </span>
+                        <span v-else-if="$i18n.locale == 'en'"> {{property.value_en}} </span>
+                        <span v-else-if="$i18n.locale == 'am'"> {{property.value_am}} </span>
+                        <span v-else> {{property.value_am}} </span>
                     </span>
                     <span v-if="property.value_en == undefined">
                       {{property.value}}

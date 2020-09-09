@@ -2,6 +2,9 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   mode: 'universal',
+  server: {
+    port: 4000,
+  },
   /*
   ** Headers of the page
   */
@@ -87,6 +90,8 @@ export default {
     '@nuxtjs/auth',
     ['nuxt-i18n', {
       lazy:true,
+      trategy: 'prefix_except_default',
+      detectBrowserLanguage: false,
       locales: [
         {
           name: 'Armenian',

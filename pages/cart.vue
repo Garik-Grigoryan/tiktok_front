@@ -2,19 +2,39 @@
     <v-container>
       <v-row>
         <v-col lg="9" md="12">
-          <v-data-table :headers="headers" :items="desserts" hide-default-footer class="elevation-1" >
+          <!-- <v-data-table :headers="headers" :items="desserts" hide-default-footer class="elevation-1" >
             <template v-slot:item.image="{ item }">
               <v-img :src="item.image" :contain="true" width="100" height="100" ></v-img>
             </template>
             <template v-slot:item.count="{ item }">
               <v-text-field type="number" @input="summCount()" @change="cahngeCount(item)" placeholder="0" v-model="item.count" style="max-width: 60px; margin: 0 auto !important; text-align: center" min="1" ></v-text-field>
             </template>
-            <!-- <template v-slot:item.color="{ item }">
-              <v-card :color="item.color" class="d-flex text-center align-center mx-3" dark height="30" width="30" style="margin: 0 auto !important;" >
-              </v-card>
-            </template> -->
             <template v-slot:item.remove="{ item }">
               <v-icon  @click="deleteItem(item)">mdi-delete</v-icon>
+            </template>
+          </v-data-table> -->
+          <v-data-table
+            :headers="headers"
+            :items="desserts"
+            :single-expand="true"
+            :expanded.sync="expanded"
+            item-key="id"
+            show-expand
+            class="elevation-1"
+          >
+            <template v-slot:item.image="{ item }">
+              <v-img :src="item.image" :contain="true" width="100" height="100" ></v-img>
+            </template>
+            <template v-slot:item.count="{ item }">
+              <v-text-field type="number" @input="summCount()" @change="cahngeCount(item)" placeholder="0" v-model="item.count" style="max-width: 60px; margin: 0 auto !important; text-align: center" min="1" ></v-text-field>
+            </template>
+            <template v-slot:item.remove="{ item }">
+              <v-icon  @click="deleteItem(item)">mdi-delete</v-icon>
+            </template>
+            <template v-slot:expanded-item="{ headers, item }">
+              <td :colspan="headers.length" style="padding: 0;">
+                <v-data-table :headers="ProdHeaders" :items="item.productProperties" item-key="id" hide-default-footer class="" ></v-data-table>
+              </td>
             </template>
           </v-data-table>
         </v-col>
@@ -178,19 +198,14 @@
             headers: [
               { text: 'Image', value: 'image',  sortable: false,  align: 'start', },
               { text: 'Name',value: 'name',  sortable: false,  align: 'center', },
-              // { text: 'Size', value: 'size',  sortable: false,  align: 'center', },
-              // { text: 'Color', value: 'color',  sortable: false,  align: 'center', },
-              { text: 'Properties', value: 'properties',  sortable: false,  align: 'center', },
+              // { text: 'Properties', value: 'properties',  sortable: false,  align: 'center', },
               { text: 'Count', value: 'count',  sortable: false,  align: 'center', },
               { text: 'Price', value: 'price',  sortable: false,  align: 'center', },
               { text: 'Remove', value: 'remove',  sortable: false,  align: 'center', },
             ],
-            desserts: [
-
-            ],
-            elem_properties_am : "",
-            elem_properties_en : "",
-            elem_properties_ru : "",
+            ProdHeaders: [],
+            desserts: [],
+            elem_properties: [],
           }
       },
       computed: {
@@ -222,78 +237,77 @@
         this.cartData.forEach((elem, key) => {
           console.log(elem);
           for(let i = 0; i < elem.properties.length; i++) {
-            if(elem.properties[i].value_en !== undefined) {
-              if(i !== elem.properties.length-1) {
-                this.elem_properties_am += elem.properties[i].property_name_am  + ": " + elem.properties[i].value_am + "; ";
-                this.elem_properties_ru += elem.properties[i].property_name_ru  + ": " + elem.properties[i].value_ru + "; ";
-                this.elem_properties_en += elem.properties[i].property_name_en  + ": " + elem.properties[i].value_en + "; ";
-              } else {
-                this.elem_properties_am += elem.properties[i].property_name_am  + ": " + elem.properties[i].value_am;
-                this.elem_properties_ru += elem.properties[i].property_name_ru  + ": " + elem.properties[i].value_ru;
-                this.elem_properties_en += elem.properties[i].property_name_en  + ": " + elem.properties[i].value_en;
-              }
-            } else {
-              if(i !== elem.properties.length-1) {
-                this.elem_properties_am += elem.properties[i].property_name_am  + ": " + elem.properties[i].value + "; ";
-                this.elem_properties_ru += elem.properties[i].property_name_ru  + ": " + elem.properties[i].value + "; ";
-                this.elem_properties_en += elem.properties[i].property_name_en  + ": " + elem.properties[i].value + "; ";
-              } else {
-                this.elem_properties_am += elem.properties[i].property_name_am  + ": " + elem.properties[i].value;
-                this.elem_properties_ru += elem.properties[i].property_name_ru  + ": " + elem.properties[i].value;
-                this.elem_properties_en += elem.properties[i].property_name_en  + ": " + elem.properties[i].value;
-              }
+            let prop_name = elem.properties[i].property_name_en;
+            let all_properties = [];
+            if (this.$i18n.locale == 'am') {
+              this.ProdHeaders.push({
+                text: elem.properties[i].property_name_am, value: prop_name, sortable: false, align: 'center'
+              });
+            }
+            if (this.$i18n.locale == 'ru') {
+              this.ProdHeaders.push({
+                text: elem.properties[i].property_name_ru, value: prop_name, sortable: false, align: 'center'
+              });
+            }
+            if (this.$i18n.locale == 'en') {
+              this.ProdHeaders.push({
+                text: elem.properties[i].property_name_en, value: prop_name, sortable: false, align: 'center'
+              });
             }
           }
-          if(this.$i18n.locale === 'am'){
-            this.desserts.push({
-              image: JSON.parse(elem.product.images)[0],
-              name: elem.product.name_am,
-              // size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-              // color: elem.color.length > 0 ? elem.color[0] : '',
-              properties: this.elem_properties_am,
-              count: elem.count,
-              price: elem.product.price,
-              remove: key,
+          if (this.$i18n.locale == 'am') {
+            this.elem_properties.push({
+              "Mechanism": elem.properties[0].value_am,
+              "Glass": elem.properties[1].value_am,
+              "Size": elem.properties[2].value,
+              "Weight": elem.properties[3].value,
+              "Belt/Chain": elem.properties[4].value_am,
+              "Belt/Chain color": elem.properties[5].value_am,
+              "Dial color": elem.properties[6].value_am,
+              "Country": elem.properties[7].value_am,
             });
           }
-          else if(this.$i18n.locale === 'en'){
-            this.desserts.push({
-              image: JSON.parse(elem.product.images)[0],
-              name: elem.product.name_en,
-              // size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-              // color: elem.color.length > 0 ? elem.color[0] : '',
-              properties: this.elem_properties_en,
-              count: elem.count,
-              price: elem.product.price,
-              remove: key,
+          if (this.$i18n.locale == 'ru') {
+            this.elem_properties.push({
+              "Mechanism": elem.properties[0].value_ru,
+              "Glass": elem.properties[1].value_ru,
+              "Size": elem.properties[2].value,
+              "Weight": elem.properties[3].value,
+              "Belt/Chain": elem.properties[4].value_ru,
+              "Belt/Chain color": elem.properties[5].value_ru,
+              "Dial color": elem.properties[6].value_ru,
+              "Country": elem.properties[7].value_ru,
             });
           }
-          else if(this.$i18n.locale === 'ru'){
-            this.desserts.push({
-              image: JSON.parse(elem.product.images)[0],
-              name: elem.product.name_ru,
-              // size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-              // color: elem.color.length > 0 ? elem.color[0] : '',
-              properties: this.elem_properties_ru,
-              count: elem.count,
-              price: elem.product.price,
-              remove: key,
-            });
-          } else {
-            this.desserts.push({
-              image: JSON.parse(elem.product.images)[0],
-              name: elem.product.name_en,
-              // size: elem.size[0] !== undefined ? elem.size[0] : elem.color,
-              // color: elem.color.length > 0 ? elem.color[0] : '',
-              properties: this.elem_properties_en,
-              count: elem.count,
-              price: elem.product.price,
-              remove: key,
+          if (this.$i18n.locale == 'en') {
+            this.elem_properties.push({
+              "Mechanism": elem.properties[0].value_en,
+              "Glass": elem.properties[1].value_en,
+              "Size": elem.properties[2].value,
+              "Weight": elem.properties[3].value,
+              "Belt/Chain": elem.properties[4].value_en,
+              "Belt/Chain color": elem.properties[5].value_en,
+              "Dial color": elem.properties[6].value_en,
+              "Country": elem.properties[7].value_en,
             });
           }
+
+          this.desserts.push({
+            image: JSON.parse(elem.product.images)[0],
+            name: elem.product.name_am,
+            productProperties: this.elem_properties,
+            count: elem.count,
+            price: elem.product.price,
+            remove: key,
+          });
         });
 
-        console.log(this.desserts);
+        if(this.user){
+            this.nameLastName = this.user.name;
+            this.email = this.user.email;
+            this.phone = this.user.phone;
+            this.address = this.user.address;
+        }
 
         await this.summCount();
       },

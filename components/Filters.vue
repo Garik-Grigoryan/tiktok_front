@@ -77,7 +77,8 @@
       }
       this.min = this.filters.minPrice;
       this.max = this.filters.maxPrice;
-      this.range = [this.filters.minPrice, this.filters.maxPrice]
+      this.range = [this.filters.minPrice, this.filters.maxPrice];
+      console.log(this.filters);
     },
     methods: {
       filter(e) {
@@ -90,10 +91,10 @@
             }
           }
         }
-       this.$cookies.set('armmall_filter', [this.items, this.range, this.$route.params.id], {
-         path: '/',
-         maxAge: 10 * 365 * 24 * 60 * 60
-       });
+        this.$cookies.set('armmall_filter', [this.items, this.range, this.$route.params.id], {
+          path: '/',
+          maxAge: 10 * 365 * 24 * 60 * 60
+        });
         this.$store.dispatch('products/Filter', [this.items, this.range, this.$route.params.id]).then(r => {
           // this.$router.push('/dashboard/categories')
         })

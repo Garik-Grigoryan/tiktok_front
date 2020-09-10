@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row justify="center">
+    <v-row v-if="products.length !== 0" justify="center">
       <productCard
         v-for="(product, i) in products"
         :key="i"
@@ -9,7 +9,11 @@
         :title="product.name"
         :price="product.price"
       ></productCard>
-
+    </v-row>
+    <v-row v-if="products.length === 0" justify="center">
+      <h2 v-if="$i18n.locale === 'am'">Այս պահին զեղչեր չկան</h2>
+      <h2 v-if="$i18n.locale === 'ru'">На данный момент скидок нет</h2>
+      <h2 v-if="$i18n.locale === 'en'">At the moment there are no discounts</h2>
     </v-row>
 
   </v-container>

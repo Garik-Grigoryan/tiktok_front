@@ -9,5 +9,5 @@ export default {
   orders: "իմ պատվերները",
   logout: 'ելք',
   aboutUs: 'Մեր մասին',
-  delivery_conditions: 'Առաքում պայմաններ'
+  delivery_conditions: 'Պայմաններ'
 }

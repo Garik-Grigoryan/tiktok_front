@@ -4,8 +4,6 @@
       <v-list>
         <v-list-item v-for="(item, i) in rightSide" :key="i" :to="item.to" router exact >
           <v-list-item-content >
-            <!-- <v-list-item-title v-text="item.title" /> -->
-            <v-list-item-title v-if="item.title === 'Delivery conditions' || item.title === 'About us'" v-text="item.title"/>
             <v-list-item-title v-if="$i18n.locale == 'ru'" v-text="item.title_ru"/>
             <v-list-item-title v-if="$i18n.locale == 'en'" v-text="item.title_en"/>
             <v-list-item-title v-if="$i18n.locale == 'am'" v-text="item.title_am"/>
@@ -27,7 +25,9 @@
                     <v-menu :open-on-hover="true" bottom offset-y v-for="(item, i) in leftSide" dark :key="i">
                       <template v-slot:activator="{ on }">
                         <v-btn exact :to="localePath(item.to)" router color="#303030" style="font-size: 16px; font-weight: 600" text class="nav_button" v-on="on" bottom >
-                          {{item.title}}
+                          <span v-if="$i18n.locale == 'ru'">{{item.title_ru}}</span>
+                          <span v-if="$i18n.locale == 'en'">{{item.title_en}}</span>
+                          <span v-if="$i18n.locale == 'am'" style="font-size: 14px;">{{item.title_am}}</span>
                         </v-btn>
                       </template>
                     </v-menu>
@@ -39,10 +39,9 @@
                     <v-menu :open-on-hover="true" bottom offset-y v-for="(item, i) in rightSide" dark :key="i">
                       <template v-slot:activator="{ on }">
                         <v-btn exact :to="localePath(item.to)" router color="#303030" style="font-size: 16px; font-weight: 600" text class="nav_button" v-on="on" bottom >
-                          <span v-if="item.title === 'Delivery conditions' || item.title === 'About us'">{{item.title}}</span>
                           <span v-if="$i18n.locale == 'ru'">{{item.title_ru}}</span>
                           <span v-if="$i18n.locale == 'en'">{{item.title_en}}</span>
-                          <span v-if="$i18n.locale == 'am'">{{item.title_am}}</span>
+                          <span v-if="$i18n.locale == 'am'" style="font-size: 14px;">{{item.title_am}}</span>
                         </v-btn>
                       </template>
                     </v-menu>
@@ -124,24 +123,32 @@
               { text: 'english', to: 'en', icon: '/eng.png', callback: () => console.log('delete') },
             ],
             leftSide: [
-              { title: 'Brands',
+              { title_en: 'Brands',
+                title_am: 'Ապրանքանշաններ',
+                title_ru: 'Бренды',
                 to: '/',
                 items: [
 
                 ],
               },
-              { title: 'Sales',
+              { title_en: 'Sales',
+                title_am: 'Վաճառք',
+                title_ru: 'Продажи',
                 to: '/sales'
               },
             ],
             rightSide: [
 
               {
-                title: 'Delivery conditions',
-                to: '/deliveryCondition'
+                title_en: 'Conditions',
+                title_am: 'Պայմաններ',
+                title_ru: 'Условия',
+                to: '/condition'
               },
               {
-                title: 'About us',
+                title_en: 'About us',
+                title_am: 'Մեր մասին',
+                title_ru: 'О нас',
                 to: '/aboutUs'
               }
             ],

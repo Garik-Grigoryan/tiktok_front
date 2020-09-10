@@ -24,10 +24,10 @@
               </v-overflow-btn>
             </v-list-item>
           </v-col>
-          <v-col lg="4" md="6" sm="6" style="display: flex; margin-left: 30px;">
+          <v-col lg="6" md="6" sm="6" style="display: flex; margin-left: 30px;">
             <v-list-item style="display: flex;">
               <p style="margin: 0;">
-                +374 77 77 77 77
+                <a href="tel: +37477777777" style="color: white;">+374 77 77 77 77</a>
               </p>
             </v-list-item>
           </v-col>

@@ -75,9 +75,7 @@
               ProdHeaders: [
                 { text: this.$t('image'), value: 'image',  sortable: false,  align: 'start', },
                 { text: this.$t('name'),value: 'name',  sortable: false,  align: 'center', },
-                // { text: this.$t('size'), value: 'size',  sortable: false,  align: 'center', },
-                // { text: this.$t('color'), value: 'color',  sortable: false,  align: 'center', },
-                { text: "Properties", value: 'properties',  sortable: false,  align: 'center', },
+                // { text: "Properties", value: 'properties',  sortable: false,  align: 'center', },
                 { text: this.$t('count'), value: 'count',  sortable: false,  align: 'center', },
                 { text: this.$t('price'), value: 'price',  sortable: false,  align: 'center', },
               ],

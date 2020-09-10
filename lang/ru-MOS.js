@@ -9,5 +9,5 @@ export default {
   orders: "Мои заказы",
   logout: 'Выход',
   aboutUs: 'О нас',
-  delivery_conditions: 'Условия Доставки'
+  delivery_conditions: 'Условия'
 }

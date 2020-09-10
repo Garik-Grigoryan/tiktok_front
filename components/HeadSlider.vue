@@ -30,15 +30,22 @@
     data () {
       return {
         slides: [
-          {text: 'First', src: '/slider_1.jpg', color: '#ffffff'},
-          {text: 'Second', src: '/slider_2.jpg', color: '#ffffff'},
-          {text: 'Third', src: '/slider_3.jpg', color: '#ffffff'},
+          // {text: 'First', src: '/slider_1.jpg', color: '#ffffff'},
+          // {text: 'Second', src: '/slider_2.jpg', color: '#ffffff'},
+          // {text: 'Third', src: '/slider_3.jpg', color: '#ffffff'},
         ],
         sliderMaxWidth:  550,
       }
     },
-    mounted () {
-      this.onResize()
+    async mounted () {
+      await this.$store.dispatch('components/getComponent', [1]);
+      console.log(this.component);
+      this.onResize();
+      if(this.slides.length == 0 && this.component.length !== 0){
+        this.component.componentElements.forEach((el) => {
+          this.slides.push({text: el.name, src: el.image, url: el.url});
+        })
+      }
     },
     methods: {
       onResize () {
@@ -48,6 +55,11 @@
           this.sliderMaxWidth = 550;
         }
         this.windowSize = { x: window.innerWidth, y: window.innerHeight }
+      },
+    },
+    computed: {
+      component() {
+        return this.$store.getters['components/slider'];
       },
     },
   }

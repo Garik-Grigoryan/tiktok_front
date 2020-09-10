@@ -30,9 +30,10 @@
                 <template v-slot:item.image="{ item }">
                   <v-img :src="item.image" :contain="true" width="100" height="100" ></v-img>
                 </template>
-                <!-- <template v-slot:item.color="{ item }">
-                  <v-card :color="item.color.toLowerCase()" class="d-flex text-center align-center mx-3" dark height="30" width="30" style="margin: 0 auto !important;" >
-                  </v-card>
+                <!-- <template v-slot:item="{ headers, item }">
+                  <td :colspan="headers.length" style="padding: 0;">
+                    <v-data-table :headers="ProdHeaders2" :items="item.productProperties" item-key="id" hide-default-footer class="" ></v-data-table>
+                  </td>
                 </template> -->
 
               </v-data-table>
@@ -126,12 +127,11 @@
           ProdHeaders: [
             {text: this.$t('image'), value: 'image', sortable: false, align: 'start',},
             {text: this.$t('name'), value: 'name', sortable: false, align: 'center',},
-            // {text: this.$t('size'), value: 'size', sortable: false, align: 'center',},
-            // {text: this.$t('color'), value: 'color', sortable: false, align: 'center',},
             {text: "Properties", value: 'properties', sortable: false, align: 'center',},
             {text: this.$t('count'), value: 'count', sortable: false, align: 'center',},
             {text: this.$t('price'), value: 'price', sortable: false, align: 'center',},
           ],
+          ProdHeaders2: [],
           desserts: [],
           elem_properties_en : [],
         }
@@ -167,7 +167,11 @@
               localStorage.setItem('orderProductProperties', JSON.stringify(properties));
             });
             let orderProductProperties = JSON.parse(localStorage.getItem('orderProductProperties'));
+            // this.ProdHeaders2 = [];
             for(let i = 0; i < orderProductProperties.length; i++) {
+              // this.ProdHeaders2.push({
+              //   text: orderProductProperties[i].property_name_en, value: orderProductProperties[i].property_name_en, sortable: false, align: 'center'
+              // });
               if(orderProductProperties[i].value_en !== undefined) {
                 if(i !== orderProductProperties.length-1) {
                   this.elem_properties_en += orderProductProperties[i].property_name_en  + ": " + orderProductProperties[i].value_am + "; ";
@@ -182,6 +186,7 @@
                 }
               }
             }
+            // console.log(this.ProdHeaders2);
 
             this.getUserOrders[el].mainProducts.push({
               image: JSON.parse(this.getUserOrders[el].productItem.data[elem].product.images)[0],

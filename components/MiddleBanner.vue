@@ -8,27 +8,27 @@
                 <v-row>
                   <v-col cols="6">
                     <v-img
-                      src="/men.jpg"
+                      :src="image[0]"
                       max-height="700"
                       height="100%"
                     >
                       <v-col cols="10" style="position: absolute; bottom: 15px; left: 40px; text-align: center; padding: 25px; height: 200px; background-color: rgba(245, 245, 245, 0.8);">
                         <h2 style="font-weight: 600; color: #a0a0a0;">Shop For</h2>
-                        <p style="font-size: 30px;">MEN'S WATCHES</p>
-                        <v-btn class="ma-2" outlined large  color="#303030">SHOP MEN'S WATCHES</v-btn>
+                        <p style="font-size: 26px; text-transform: uppercase">{{name[0]}}</p>
+                        <v-btn class="ma-2" outlined large  color="#303030" style="text-transform: uppercase">SHOP {{name[0]}}</v-btn>
                       </v-col>
                     </v-img>
                   </v-col>
                   <v-col cols="6">
                     <v-img
-                      src="/women.jpg"
+                      :src="image[1]"
                       position="top"
                       max-height="700"
                     >
                       <v-col cols="10" style="position: absolute; bottom: 15px; left: 40px; text-align: center; padding: 25px; height: 200px; background-color: rgba(245, 245, 245, 0.8);">
                         <h2 style="font-weight: 600; color: #a0a0a0;">Shop For</h2>
-                        <p style="font-size: 30px;">WOMEN'S WATCHES</p>
-                        <v-btn class="ma-2" outlined large  color="#303030">SHOP WOMEN'S WATCHES</v-btn>
+                        <p style="font-size: 26px; text-transform: uppercase">{{name[1]}}</p>
+                        <v-btn class="ma-2" outlined large  color="#303030" style="text-transform: uppercase">SHOP {{name[1]}}</v-btn>
                       </v-col>
                     </v-img>
                   </v-col>
@@ -45,25 +45,42 @@
 
 <script>
     export default {
-        name: "MiddleBanner",
+      name: "MiddleBanner",
       data () {
         return {
           contain:  true,
+          image: [],
+          url: [],
+          name: [],
         }
       },
-        mounted () {
-          this.onResize()
+      async mounted () {
+        this.onResize();
+        await this.$store.dispatch('components/getComponent', [2]);
+        console.log(this.component);
+        if(this.component.length !== 0) {
+          this.component.componentElements.forEach((el, i) => {
+            this.image.push(el.image);
+            this.url.push(el.url);
+            this.name.push(el.name);
+          });
+        }
+      },
+      methods: {
+        onResize () {
+          if(window.innerWidth <= 1263){
+            this.contain = false;
+          }else{
+            this.contain = true;
+          }
+          this.windowSize = { x: window.innerWidth, y: window.innerHeight }
         },
-        methods: {
-          onResize () {
-            if(window.innerWidth <= 1263){
-              this.contain = false;
-            }else{
-              this.contain = true;
-            }
-            this.windowSize = { x: window.innerWidth, y: window.innerHeight }
-          },
+      },
+      computed: {
+        component() {
+          return this.$store.getters['components/banner'];
         },
+      },
     }
 </script>
 

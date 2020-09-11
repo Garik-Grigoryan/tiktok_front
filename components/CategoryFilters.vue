@@ -88,14 +88,16 @@
     },
     methods: {
       filter(e) {
+        if(e.length === 2) {
+          this.range = [e[0], e[1]];
+        }
+        
         if(e.target !== undefined){
           if(e.target.tagName === 'DIV' || e.target.tagName === 'I'){
             if(e.target.tagName === 'I'){
               this.$delete(this.items[2].select, this.items[2].select.indexOf(e.target.getAttribute('data-value')));
-              console.log(this.items[2].select);
             } else {
               this.items[2].select.push(e.target.getAttribute('data-value'));
-              console.log(this.items[2].select);
             }
           }
         }

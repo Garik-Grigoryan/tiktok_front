@@ -65,14 +65,20 @@
       methods:{
         next() {
           let cookieRes = this.$cookies.get('armmall_filter');
-          console.log(cookieRes);
-          if(cookieRes[2] === this.$route.params.id){
-            cookieRes.push(this.page)
-            this.$store.dispatch('products/Filter', cookieRes).then(r => {
-            })
-          }else{
+          if(cookieRes !== undefined && cookieRes.id === this.$route.params.id) {
+            this.$store.dispatch('products/Filter', [JSON.parse(cookieRes.items), JSON.parse(cookieRes.range), cookieRes.id, this.page]);
+          } else{
             this.$router.push({ query: { page: this.page } });
           }
+          // let cookieRes = this.$cookies.get('armmall_filter');
+          // console.log(cookieRes);
+          // if(cookieRes[2] === this.$route.params.id){
+          //   cookieRes.push(this.page)
+          //   this.$store.dispatch('products/Filter', cookieRes).then(r => {
+          //   })
+          // }else{
+          //   this.$router.push({ query: { page: this.page } });
+          // }
         }
       },
     }

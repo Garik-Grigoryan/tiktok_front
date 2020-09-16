@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-container>
-      <input id="filter_data" type="hidden" value="">
       <v-row v-if="$i18n.locale === 'en'" justify="center">
         <productCard
           v-for="(product, i) in products.products"

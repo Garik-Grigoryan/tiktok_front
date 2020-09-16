@@ -180,7 +180,7 @@
           user_id = this.user.id
         }
         // this.$store.dispatch('wishListAndCart/setCArt', [id, user_id, this.selectedColor, this.selectedSize, this.count])
-        this.$store.dispatch('wishListAndCart/setCArt', [id, user_id, this.productProperties, this.count]);
+        this.$store.dispatch('wishListAndCart/setCArt', [id, user_id, JSON.parse(localStorage.getItem('productProperties')), this.count]);
       },
       selectColor(e) {
         if(e.target !== undefined){

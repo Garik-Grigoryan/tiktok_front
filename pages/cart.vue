@@ -166,6 +166,8 @@
       name: "cart",
       data () {
           return {
+            expanded: [],
+            id: "",
             settings: true,
             dialog: false,
             state: '',
@@ -205,7 +207,7 @@
             ],
             ProdHeaders: [],
             desserts: [],
-            elem_properties: [],
+            elem_properties : [],
           }
       },
       computed: {
@@ -234,8 +236,13 @@
           await this.$store.dispatch('wishListAndCart/getWishListAndCartData', [0]);
         }
 
+        let data_count = 0;
         this.cartData.forEach((elem, key) => {
           console.log(elem);
+          data_count++;
+          this.ProdHeaders = [];
+          this.elem_properties = [];
+          this.id = data_count;
           for(let i = 0; i < elem.properties.length; i++) {
             let prop_name = elem.properties[i].property_name_en;
             let all_properties = [];
@@ -293,6 +300,7 @@
           }
 
           this.desserts.push({
+            id: this.id,
             image: JSON.parse(elem.product.images)[0],
             name: elem.product.name_am,
             productProperties: this.elem_properties,
@@ -301,6 +309,7 @@
             remove: key,
           });
         });
+        console.log(this.desserts);
 
         if(this.user){
             this.nameLastName = this.user.name;

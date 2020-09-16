@@ -59,6 +59,7 @@
         { tab: 'Women\'s watches', content: [] },
         { tab: 'Men\'s watches', content: [] },
       ],
+      productProperties: [],
     }),
     methods: {
       addToWishlist(e, id) {
@@ -68,12 +69,28 @@
         }
         this.$store.dispatch('wishListAndCart/setWishList', [id, user_id])
       },
-      addToCart(e, id) {
+      async addToCart(e, id) {
         let user_id = 0;
         if(this.user){
           user_id = this.user.id
         }
-        this.$store.dispatch('wishListAndCart/setCArt', [id, user_id])
+
+        await this.$store.dispatch('properties/productProperty', [id]).then(function(defs){
+          let properties = [];
+          defs.forEach(elem => {
+            let value_en, value_am, value_ru = "";
+            for(let i = 0; i < elem.propertyValues.length; i++) {
+              if(elem.propertyValues[i].id == elem.productProperty.propertyValue) {
+                value_en = elem.propertyValues[i].value_en;
+                value_ru = elem.propertyValues[i].value_ru;
+                value_am = elem.propertyValues[i].value_am;
+              }
+            }
+            properties.push({'property_name_en': elem.propertyData.name_en, 'property_name_am': elem.propertyData.name_am, 'property_name_ru': elem.propertyData.name_ru, 'type': elem.propertyData.type, 'value': elem.productProperty.propertyValue, 'value_en': value_en, 'value_am': value_am, 'value_ru': value_ru});
+          });
+          localStorage.setItem('productProperties', JSON.stringify(properties));
+        });
+        this.$store.dispatch('wishListAndCart/setCArt', [id, user_id, JSON.parse(localStorage.getItem('productProperties')), 1]);
       }
     },
     mounted() {

@@ -10,6 +10,7 @@
       v-for="(slide, i) in slides"
       :key="i"
       :src="slide.src"
+      :to="slide.url"
     >
 
         <v-row

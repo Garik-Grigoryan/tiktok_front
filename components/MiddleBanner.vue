@@ -15,7 +15,7 @@
                       <v-col cols="10" style="position: absolute; bottom: 15px; left: 40px; text-align: center; padding: 25px; height: 200px; background-color: rgba(245, 245, 245, 0.8);">
                         <h2 style="font-weight: 600; color: #a0a0a0;">Shop For</h2>
                         <p style="font-size: 26px; text-transform: uppercase">{{name[0]}}</p>
-                        <v-btn class="ma-2" outlined large  color="#303030" style="text-transform: uppercase">SHOP {{name[0]}}</v-btn>
+                        <v-btn :to="url[0]" class="ma-2" outlined large  color="#303030" style="text-transform: uppercase">SHOP {{name[0]}}</v-btn>
                       </v-col>
                     </v-img>
                   </v-col>
@@ -28,7 +28,7 @@
                       <v-col cols="10" style="position: absolute; bottom: 15px; left: 40px; text-align: center; padding: 25px; height: 200px; background-color: rgba(245, 245, 245, 0.8);">
                         <h2 style="font-weight: 600; color: #a0a0a0;">Shop For</h2>
                         <p style="font-size: 26px; text-transform: uppercase">{{name[1]}}</p>
-                        <v-btn class="ma-2" outlined large  color="#303030" style="text-transform: uppercase">SHOP {{name[1]}}</v-btn>
+                        <v-btn :to="url[1]" class="ma-2" outlined large  color="#303030" style="text-transform: uppercase">SHOP {{name[1]}}</v-btn>
                       </v-col>
                     </v-img>
                   </v-col>
